@@ -53,5 +53,15 @@
   - 데드락이 발생할 수 있는 자원의 종류에는 무엇이 있을까요?
   - 데드락을 예방, 회피, 무시의 차이에 대해 설명해주세요
   - Banker’s Algorithm은 예방, 회피, 무시 중 어떤 방법에 속할까요?
+- [Synchronize](./Operation_System/Synchronize.md)
+  - 경쟁 상태(Race Condition)에 대해 설명해주세요
+  - 경쟁 상태(Race Condition)는 어떤 상황에서 발생할까요?
+  - 경쟁 상태(Race Condition)를 해결하는 방법에는 어떤 방법이 있을까요?
+  - 임계영역(Critical Section)에 대해 설명해주세요
+  - Critical Section의 필요조건에는 무엇이 있을까요?
+  - Thread-safe에 대해 설명해주세요. (hint: critical section)
+  - Semaphore와 Mutex Lock의 차이에 대해 설명해주세요
+  - Semaphore에서 발생할 수 있는 문제점에 대해 설명해주세요
+  - Priority Inversion은 무엇일까요?
 
 </details>
