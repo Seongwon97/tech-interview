@@ -22,7 +22,7 @@
   > ![Untitled](img/process_1.png)
   >
   > int a,b는 local variable이어서 stack에 저장이 되고 class1 obj도 local variable이어서 stack에 저장이 되는데 object의 실제 내용은 heap에 저장이 되고 stack에서는 주소값을 갖고 있다. object를 생성이 되면 처음에는 stack에 주소값만 생성이 되고 실제로 할당이 되면 그때서야 heap이 생성되고 실제 데이터가 저장이 된다.
->
+
 
 프로세스는 위와 같은 자신만의 공간과 자원을 할당받아 사용을 한다. 그에 반하여 스레드는 스택만 따로 할당받고 나머지 영역은 프로세스 안에서 다른 스레드와 공간과 자원을 공유하며 사용한다.
 
