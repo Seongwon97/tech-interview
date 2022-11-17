@@ -39,13 +39,13 @@
 - System Call과 Function Call의 차이점에 대해 설명해주세요
 - 사용자 모드와 커널 모드에 대해 설명해주세요
 
-[**인터럽트**](./Operation_System/Interrupt.md)
+[**Interrupt**](./Operation_System/Interrupt.md)
 - 인터럽트란 무엇일까요?
 - 인터럽트는 시그널을 하드웨어적으로 확인할까요? 소프트웨어적으로 할까요?
 - 인터럽트 벡터와 인터럽트 서비스 루틴에 대해 설명해주세요
 - 인터럽트 실행 과정에 대해 설명해주세요
 
-[**CPU 스케쥴링**](./Operation_System/CPU%20Scheduling.md)
+[**CPU Scheduling**](./Operation_System/CPU%20Scheduling.md)
 - CPU 스케줄링이란 무엇일까요?
 - 장기, 중기, 단기 스케줄러로 나누는 기준에 대해 설명해주세요
 - 선점과 비선점의 차이에 대해 설명해주세요
@@ -88,5 +88,14 @@
 - Segmentation에 대해 설명해주세요
 - Paging과 Segmentation의 차이점에 대해 설명해주세요
 - 외부 단편화(External Fragmentation)와 내부 단편화(Internal Fragmentation)에 대해 설명해주세요
+
+[**Virtual Memory, Page Replacement Algorithm**](./Operation_System/Virtual%20Memory,%20Page%20Replacement%20Algorithm.md)
+- 가상 메모리에 대해 설명해주세요
+- Swapping에 대해 설명해주세요
+- Demand Paging에 대해 설명해주세요
+- 페이지 교체의 전반적인 순서에 대해 설명해주세요
+- 페이지 교체 알고리즘은 어떤 것이 있을까요?
+- LRU 페이지 교체 알고리즘에서 가장 오랫동안 사용하지 않은 Victim Page를 선정하는 방법은 어떤 방법이 있을까요?
+- Reference Bit에 대해 설명해주세요
 
 </details>
