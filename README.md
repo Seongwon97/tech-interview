@@ -81,6 +81,12 @@
 - 캐시란 무엇일까요?
 - 캐시의 지역성에 대해 설명해주세
 
-
+[**Memory Allocation (feat. Paging, Segmentation)**](./Operation_System/Memory%20Allocation.md)
+- 메모리 연속 할당(Contiguous Memory Allocation)이란 무엇인지와 장단점에 대해 설명해주세요
+- Paging에 대해 설명해주세요
+- Paging이 필요한 이유(장때)에 대해 설명해주세요
+- Segmentation에 대해 설명해주세요
+- Paging과 Segmentation의 차이점에 대해 설명해주세요
+- 외부 단편화(External Fragmentation)와 내부 단편화(Internal Fragmentation)에 대해 설명해주세요
 
 </details>
