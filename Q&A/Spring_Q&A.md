@@ -243,7 +243,7 @@ IoC의 장점
 
 Servlet의 단점을 보완하기 위해 만들어진 것이 FrontController Pattern을 적용한 Dispatcher Servlert이 만들어졌다. 요청이 오면 Dispatcher Servlet에서 요청을 처리해줄 Servlet을 찾는 해준다. 요청에 따라 Servlet을 1대1로 생성하는 구조에서 Front Controller가 올바른 핵심 비즈니스 로직을 수행하게 변하여 생성해야하는 Servlet의 개수가 1개로 줄어들었다.
 
-![Untitled](Spring/img/SpringMVC.png)
+![Untitled](../Spring/img/SpringMVC.png)
 
 [[Spring] MVC 동작 방식 이해하기](https://seongwon.dev/Spring/20220621-%EC%8A%A4%ED%94%84%EB%A7%81MVC-%EB%8F%99%EC%9E%91%EB%B0%A9%EC%8B%9D/)
 
@@ -325,8 +325,7 @@ AOP(Aspect Oriented Programming)은 관점 지향 프로그래밍으로 로직�
 
 </details>
 
----
-
+``
 # JPA
 <details>
 <summary>JPA에서 영속성 컨텍스트에 대해 설명해주세요</summary>
