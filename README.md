@@ -7,7 +7,7 @@
 <br>
 
 [**운영체제란?**](./Operation_System/운영체제란.md)
-- 운영체자란 무엇일까요?
+- 운영체제란 무엇일까요?
 - 커널이란 무엇일까요?
 - 운영체제는 어떤 기능을 하는지 설명해주세요
 - 운영체제가 관리하는 5가지 지원에 대해 설명해주세요
@@ -88,6 +88,7 @@
 - Segmentation에 대해 설명해주세요
 - Paging과 Segmentation의 차이점에 대해 설명해주세요
 - 외부 단편화(External Fragmentation)와 내부 단편화(Internal Fragmentation)에 대해 설명해주세요
+- TLB에 대해 설명해주세요
 
 [**Virtual Memory, Page Replacement Algorithm**](./Operation_System/Virtual%20Memory,%20Page%20Replacement%20Algorithm.md)
 - 가상 메모리에 대해 설명해주세요
@@ -99,3 +100,5 @@
 - Reference Bit에 대해 설명해주세요
 
 </details>
+
+### [🌿 Spring & JPA](Spring_Q&A.md)
