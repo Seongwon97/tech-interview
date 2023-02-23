@@ -92,3 +92,65 @@ DIP(Dependency Inversion Principle, 의존성 역전의 원칙)
 - 추상화에 의존하고 구체화에 의존하면 안 된다. 즉, 하위 모듈이 상위 모듈에서 정의한 추상 타입(인터페이스)에 의존하여야 한다.
 
 </details>
+
+
+<details>
+<summary>GC(Garbage Collection)</summary>
+
+<br>
+
+`stop-the-world`란, GC을 실행하기 위해 JVM이 애플리케이션 실행을 멈추는 것이다.
+
+- stop-the-world가 발생하면 GC를 실행하는 쓰레드를 제외한 나머지 쓰레드는 모두 작업을 멈춘다.
+
+GC는 두 가지 가설 아래에서 만들어졌다.
+
+- 대부분의 객체는 금방 접근 불가능 상태(unreachable)가 된다.
+- 오래된 객체에서 젊은 객체로의 참조는 아주 적게 존재한다.
+
+이러한 가설에 의해 GC는 Young, Old영역으로 나눠서 동작하게 된다.
+
+- Young 영역(Yong Generation 영역): 새롭게 생성한 객체의 대부분이 여기에 위치한다. 대부분의 객체가 금방 접근 불가능 상태가 되기 때문에 매우 많은 객체가 Young 영역에 생성되었다가 사라진다. 이 영역에서 객체가 사라질때 Minor GC가 발생한다고 말한다.
+- Old 영역(Old Generation 영역): 접근 불가능 상태로 되지 않아 Young 영역에서 살아남은 객체가 여기로 복사된다. 대부분 Young 영역보다 크게 할당하며, 크기가 큰 만큼 Young 영역보다 GC는 적게 발생한다. 이 영역에서 객체가 사라질 때 Major GC(혹은 Full GC)가 발생한다고 말한다.
+
+Young영역은 Eden영역과 2개의 Survivor영역으로 나뉜다. 동작은 아래와 같다.
+
+- 새로 생성한 대부분의 객체는 Eden 영역에 위치한다.
+- Eden 영역에서 GC가 한 번 발생한 후 살아남은 객체는 Survivor 영역 중 하나로 이동된다.
+- Eden 영역에서 GC가 발생하면 이미 살아남은 객체가 존재하는 Survivor 영역으로 객체가 계속 쌓인다.
+- 하나의 Survivor 영역이 가득 차게 되면 그 중에서 살아남은 객체를 다른 Survivor 영역으로 이동한다. 그리고 가득 찬 Survivor 영역은 아무 데이터도 없는 상태로 된다.
+- 이 과정을 반복하다가 계속해서 살아남아 있는 객체는 Old 영역으로 이동하게 된다.
+
+> Survivor 영역 중 하나는 반드시 비어 있는 상태로 남아 있어야 한다.
+>
+
+Old 영역은 기본적으로 데이터가 가득 차면 GC를 실행한다. GC 방식에 따라서 처리 절차가 달라지므로, 어떤 GC 방식이 있는지 살펴보면 이해가 쉬울 것이다. GC 방식은 JDK 7을 기준으로 5가지 방식이 있다.
+
+- Serial GC
+  - CPU코어가 하나만 있을 때 사용하기 위해 만든 방식이라 성능이 많이 떨어져서 절대 사용하면 안된다
+  - Old 영역의 GC는 `mark-sweep-compact`이라는 알고리즘을 사용
+    1. Old 영역에 살아 있는 객체를 식별(Mark)
+    2. 힙(heap)의 앞 부분부터 확인하여 살아 있는 것만 남긴다(Sweep)
+    3. 각 객체들이 연속되게 쌓이도록 힙의 가장 앞 부분부터 채워서 객체가 존재하는 부분과 객체가 없는 부분으로 나눈다(Compaction)
+- Parallel GC
+  - Serial과 동작 알고리즘은 같으나 GC를 처리하는 쓰레드가 여러개라 더 빠르다.
+- Parallel Old GC(Parallel Compacting GC)
+  - `Mark-Summary-Compaction`단계를 거친다.
+    - Summary 단계는 앞서 GC를 수행한 영역에 대해서 별도로 살아 있는 객체를 식별한다
+- Concurrent Mark & Sweep GC(이하 CMS)
+  - 동작은 과정
+    1. Initial Mark 단계에서는 클래스 로더에서 가장 가까운 객체 중 살아 있는 객체만 찾는 것으로 끝내서 stop the world가 매우 짧다.
+    2. Concurrent Mark 단계에서는 방금 살아있다고 확인한 객체에서 참조하고 있는 객체들을 따라가면서 확인한다. 이 단계의 특징은 다른 스레드가 실행 중인 상태에서 동시에 진행된다는 것이다.
+    3. Concurrent Sweep 단계에서는 쓰레기를 정리하는 작업을 실행한다. 이 작업도 다른 스레드가 실행되고 있는 상황에서 진행한다.
+  - CMS GC는 stop the world가 짧다는 장점이 있으나 아래의 단점이 존재한다.
+    - 다른 GC 방식보다 메모리와 CPU를 더 많이 사용한다.
+    - Compaction 단계가 기본적으로 제공되지 않는다.
+- G1(Garbage First) GC
+  - G1 GC는 Young 영역과 Old 영역에 대해서는 잊는 것이 좋다.
+  - G1 GC는 바둑판의 각 영역에 객체를 할당하고 GC를 실행한다. 그러다가, 해당 영역이 꽉 차면 다른 영역에서 객체를 할당하고 GC를 실행한다.
+    - 앞서 동작한 Young의 세가지 영역에서 데이터가 Old 영역으로 이동하는 단계가 사라진 GC 방식이다.
+  - G1 GC의 가장 큰 장점은 성능이다. 지금까지 설명한 어떤 GC 방식보다도 빠르다.
+
+[NAVER D2](https://d2.naver.com/helloworld/1329)
+
+</details>
