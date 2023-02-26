@@ -253,3 +253,26 @@ string1과 string2는 같은 객체를 바라본다는데 어째서 둘을 비�
 
 </details>
 
+
+<details>
+<summary>동일성과 동등성에 대해 설명해주세요</summary>
+
+<br>
+
+동일성(==)은 객체가 참조하고 있는 주소 값을 비교하는 것이며 동등성(equals)는 equals를 통해 정의된 값에 따라 비교를 하는 것이다. 객체들의 최상위 클래스 Object는 기본적으로 equals가 주소 값을 비교하는 동일성 체크와 동일하며여 우리는 객체의 equals재정의를 통해 내부 값이 같으면 두 객체가 동등하다고 판단할 수록 할 수 있다.
+
+</details>
+
+
+<details>
+<summary>Equals & HashCode는 왜 재정의를 해야할까?</summary>
+
+<br>
+
+객체들의 최상위 클래스 Object는 기본적으로 equals가 주소 값을 비교하는 동일성 체크와 동일하며여 우리는 객체의 equals재정의를 통해 내부 값이 같으면 두 객체가 논리적으로 동등하다고 판단할 수록 할 수 있다.
+
+그렇다면 HashCode는 왜 재정의를 해야할까?
+
+Object의 명세서에는 `equals(Object)가 두 객체를 같다고 판단했다면, 두 객체의 hashCode는 똑같은 값을 반환해야 한다.` 라는 조항이 존재합니다. 이를 위해 우리는 equals를 재정의할 때는 hashCode도 반드시 재정의해야 한다.
+
+</details>
