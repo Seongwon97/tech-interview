@@ -276,3 +276,37 @@ string1과 string2는 같은 객체를 바라본다는데 어째서 둘을 비�
 Object의 명세서에는 `equals(Object)가 두 객체를 같다고 판단했다면, 두 객체의 hashCode는 똑같은 값을 반환해야 한다.` 라는 조항이 존재합니다. 이를 위해 우리는 equals를 재정의할 때는 hashCode도 반드시 재정의해야 한다.
 
 </details>
+
+<details>
+<summary>자바의 문자열 더하기 연결 (feat. StringBuilder)</summary>
+
+<br>
+
+- String은 불변하기(immutable)이기 때문에 String과 String을 더하면 새로운 String 객체를 생성한다. 따라서 String과 String을 더하는 시점에 메모리 할당과 메모리 해제가 계속 발생한다.
+- StringBuilder는 String과 다르게 기존 데이터에 새로운 데이터를 더하는 방식을 취하기 때문에 속도가 더 빠르다.
+- 따라서 긴 문자열을 더하는 상황이 발생하는 경우 StringBuilder를 활용해 구현한다.
+
+String은 final로 만들어져 인스턴스의 값은 한번 생성하면 변경이 불가능합니다. 그래서 concat과 문자열 덧셈 과 같이 string의 값을 변경하려고 한다면 기존 인스턴스는 남아있고 남아있는 기존 인스턴스를 사용하여 새로운 인스턴스를 만들게 되어 메모리 낭비가 발생합니다.
+
+> Java8이후로는 `"ab+"bc"+"cd"`와 같은 문자열 더하기 연산을 한다면 내부적으로 컴파일시 최적화를 해줍니다. Java8에서는 `StringBuilder` 가 최적화를 해주며, Java11의 경우 `StringConcatFactory` 가 최적화를 해줍니다. Java8에서 자동으로 컴파일시점에 최적화를 해준 `StringBuilder` 는 + 를 할 때마다 StringBuilder를 생성하여 문자열을 합쳐주고 다시 String으로 반환을 하여 +연산을 할 때마다 각각의 StringBuilder를 선언을 해주는 단점이 존재하였습니다. 그래서 Java11부터 새로운 방법 `StringConcatFactory`로 변경되었습니다. `StringBuilder`와 `StringConcatFactory` 의 차이점을 간단히 설명하자면 `StringBuilder`는 +를 할 때마다 하나의 String객체를 반환하는 반면에 `StringConcatFactory`는 최종 상태에서만 String을 만들어줍니다.
+>
+
+앞서 말했듯이 JVM이 컴파일 시점에 스스로 String연결을 최적화를 해줍니다. 하지만 최적화는 항상 해주는 것이 아니라 해주지 않는 경우도 존재합니다. 그래서 우리는 긴 문자열들을 더할 때는 `StringBuilder`
+, `StringBuffer`를 사용하여 직접 낭비를 줄일 수 있습니다.
+
+</details>
+
+
+<details>
+<summary>StringBuilder, StringBuffer의 특징과 차이점에 대해 설명해주세요</summary>
+
+<br>
+
+- 둘 다 내부적으로 가변적인 `char[]`를 멤버 변수로 가집니다.
+- 새로운 인스턴스를 생성하지 않고 `char[]`를 변경할 수 있어서 문자열을 여러번 연결하거나 변경할 때 사용하면 유용합니다.
+- 출력은 나중에 `toString()` 메서드로 String반환을 해주면 됩니다.
+- StringBuilder와 StringBuffer는 `char[]` (character buffer)를 갖는 공통점이 있으나 StringBuffer는 multi-thread환경에서 동기화(synchronization)가 보장됩니다.
+- 그래서 single thread 프로그래밍의 경우는 StringBuilder사용을 권장하며 multi-thread환경에서는 StringBuffer를 사용을 권장한다.
+
+</details>
+
