@@ -23,24 +23,6 @@
 
 
 <details>
-<summary>가용성, 고가용성</summary>
-
-<br>
-
-**가용성**
-
-- 가용성은 서버와 네트워크 등의 다양한 시스템이 정상적으로 사용 가능한 정도를 의미한다.
-- 식으로 표현하면 `정상 시간 / 전체 사용시간`이다.
-    - 해당 값이 높을 수록 가용성이 높은 프로그램이다.
-
-**고가용성**
-
-- 서버와 네트워크 등의 시스템이 오랜 기간동안 지속적으로 장애없이 정상 운영이 가능한 성질을 의미한다.
-
-</details>
-
-
-<details>
 <summary>자바의 버전별 특징에 대해 설명해주세요</summary>
 
 <br>
@@ -202,3 +184,72 @@ Old 영역은 기본적으로 데이터가 가득 차면 GC를 실행한다. GC 
   - 메서드 - 클래스 메서드는 인스턴스 상태와 관련 없이, **인스턴스가 생성되지 않아도 호출이 가능한 클래스**를 뜻한다. 즉, static이 붙은 메서드를 클래스 필드라 한다.
 
 </details>
+
+
+<details>
+<summary>JVM load와 unload에 대해 설명해주세요</summary>
+
+<br>
+
+JVM Load는 클래스가 필요한 시점에 동적으로 클래스의 바이트코드를 읽어 메모리에 할당하는 과정을 뜻한다.
+
+JVM Unload는 클래스가 더 이상 사용되지 않아 메모리에서 클래스를 해제하는 과정을 의미한다.
+
+</details>
+
+
+<details>
+<summary>new String()을 통한 문자열 선언</summary>
+
+<br>
+
+```java
+String string1 = "abc";
+String string2 = new String("abc");
+```
+
+위의 코드는 String class를 만드는 두가지 방법을 나타낸다. 두가지 방법은 보기에는 같은 결과가 나온다고 생각할 수 있지만 내부적으로는 다른 결과를 낸다. string1과 string2는 스트링 풀(String pool)에 있는 같은 객체를 바라보게 된다. 반면에 `new String()`을 통해 생성한 string3의 경우는 힙 메모리에 새로운 인스턴스를 만들어 관리를 하게 된다. 예시 코드를 작성하여 수행해보면 다음과 같은 결과가 나온다.
+
+```java
+public class StringTest {
+
+	public static void main(String[] args) {
+		String string1 = new String("abc");
+		String string2 = new String("abc");
+
+		System.out.println(string1 == string2); // false
+
+		String string3 = "abc";
+		String string4 = "abc";
+
+		System.out.println(string3 == string4); // true
+	}
+}
+```
+
+위의 코드의 경우 `new String` 을 사용하여 새로운 인스턴스를 생성한 string1, string2의 경우는 서로 다른 주소값을 가르켜 false라는 결과를 반환한다. 반면에 스트링 풀의 주소만을 가르키며 생성한 string3, string4의 경우는 값이 같다는 결과가 나오게 된다.
+
+</details>
+
+
+<details>
+<summary>String이 같은지 비교할 때는 동등성(equals) 비교를 왜 해야할까요?</summary>
+
+<br>
+
+```java
+public class StringTest {
+
+	public static void main(String[] args) {
+		String string1 = "abc";
+		String string2 = "abc";
+
+		System.out.println(string3.equals(string4)); // true
+	}
+}
+```
+
+string1과 string2는 같은 객체를 바라본다는데 어째서 둘을 비교할 때 동일성(==)이 아닌 동등성(equals)으로 같은지 체크할까? Java8 이후로는 `String string1 = "abc"`와 같이 선언한 내용도 GC의 지시 대상이 되어서 다른 객체가 될 수 있다. 그래서 String 객체들의 비교는 동일성이 아닌 동등성으로 체크한다.
+
+</details>
+
