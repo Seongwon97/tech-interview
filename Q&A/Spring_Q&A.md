@@ -139,11 +139,28 @@ IoC의 장점
 
 <br>
 
-- Singleton, Prototype, Request, Session, Global Session
-- 프로토타입 빈은 매번 새로운 객체를 생성한다.
-- 📌 프로토타입 빈을 사용하면 빈은 객체 생성, 프로퍼티 설정 및 초기화 작업까지는 수행하지만, 컨테이너를 종료한다고 해서 생성한 빈의 프로토타입 빈의 소멸 메서드를 실행하지는 않는다. 즉, 소멸 과정이 실행되지 않아 프로토타입 범위의 빈을 사용할 때는 빈 객체의 소멸 처리를 코드에서 직접 해줘야 한다.
+### Bean Scope란?
 
-[[Spring] Spring Bean의 개념과 Bean Scope 종류 - Heee's Development Blog](https://gmlwjd9405.github.io/2018/11/10/spring-beans.html)
+스프링은 자바 객체들을 관리하기 쉽게 IoC컨테이너에 Bean으로 등록하여 사용한다. Bean들은 IoC컨테이너에 의해 생성되고 소멸되는 등의 라이프사이클을 거치게 된다. 이때 Bean이 관리되는 범위를 Bean의 Scope이라고 한다.
+
+### Scope의 종류
+
+스프링 공식문서에는 아래와 같이 6가지 종류의 Scope을 설명하고 있다.
+
+- Singleton, Prototype, Request, Session, Application, WebSocket
+
+![Untitled](img/spring/img_1.png)
+
+- singleton: 스프링에서 default로 사용하는 Scope로 IoC 컨테이너에 한 개의 객체만 생성하여 관리한다.
+- prototype: 컨테이너에게 빈을 요청할 때마다 새로운 객체를 생성하여 반환해준다.
+- request: Request가 발생하면 bean이 생성되고 종료된다. 같은 API라도 호출될 때마다 새로운 bean이 생성된다.
+- session: Http session과 동일한 생명 주기를 가지는 스코프이다.
+- application: 서블릿 컨텍스와 동일한 생명주기를 가지는 스코프이다.
+- websocket: WebSocket과 동일한 생명주기를 갖는 스코프이다.
+
+[[Spring] Bean이란 무엇일까?](https://seongwon.dev/Spring-MVC/20220616-스프링-Bean/)
+
+[Core Technologies](https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans-factory-scopes)
 </details>
 
 <details>
