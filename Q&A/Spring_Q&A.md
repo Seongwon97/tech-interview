@@ -205,19 +205,20 @@ IoC의 장점
 
 `@RequestParam`
 
-- Query Parameter나 form data 형식의 데이터들을 컨트롤러의 method argument로 변환해준다.
+- Query Parameter나 form-data 형식의 데이터들을 컨트롤러의 method argument로 변환해준다.
 
 `@RequestBody`
 
-- Http request body의 값을 읽어오기 위해 사용되는데 이를 `HttpMessageConverter`를 통해 객체로 역직렬화해준다
-- JSON 데이터를 객체로 반환할 때 Spring에 등록되어있는 Jackson라이브러리의 `MappingJackson2HttpMessageConverter`를 사용하여 Reflection을 통해 역직렬화를 하기 때문에 DTO에는 기본 생성자와 getter/setter등이 필요하다.
+- Http request body의 값을 읽어오기 위해 사용되는데 이를 `HttpMessageConverter`를 통해 객체로 역직렬화해준다
+- JSON 데이터를 객체로 반환할 때 Spring에 등록되어있는 Jackson라이브러리의 `MappingJackson2HttpMessageConverter`를 사용하여 Reflection을 통해 역직렬화를 하기 때문에 DTO에는 기본 생성자와 getter/setter등이 필요하다.
 
   > 역직렬화는 stream→객체, 직렬화는 객체→ stream
->
+
 
 `@ModelAttribute`
 
-- ModelAttribute는 RequestBody와 다르게 MessageConverter를 통해 Json을 객체로 변환해주는 방법이 아닌 생성자나 Setter를 통한 데이터 주입을 시켜 객체를 생성한다. 만약 값을 주입해주는 생성자나 setter함수가 없다면 매핑을 시키지 못하고 필드는 null값을 갖게 된다.
+- multipart/form-data 형태의 request body 또는 Query Parameter를 객체로 데이터 바인딩 해주는 것을 알 수 있다.
+- ModelAttribute는 RequestBody와 다르게 MessageConverter를 통해 Json을 객체로 변환해주는 방법이 아닌 생성자나 Setter를 통한 데이터 주입을 시켜 객체를 생성한다. 만약 값을 주입해주는 생성자나 setter함수가 없다면 매핑을 시키지 못하고 필드는 null값을 갖게 된다.
 
 </details>
 
@@ -249,7 +250,7 @@ IoC의 장점
     1. 1대1 매핑 구조를 갖고 있어 공통 로직에 대해 중복 로직이 발생한다.
     2. 모든 요청들이 서블릿에 의존적이어서 Servlet에 종속적인 프로그램을 작성하게 된다.
 
-[[Spring] Servlet이란?](https://seongwon.dev/Spring/20220620-Servlet%EC%9D%B4%EB%9E%80/)
+[[Spring] Servlet이란?](https://seongwon.dev/Spring-MVC/20220620-Servlet%EC%9D%B4%EB%9E%80/)
 
 </details>
 
@@ -262,7 +263,7 @@ Servlet의 단점을 보완하기 위해 만들어진 것이 FrontController Pat
 
 ![Untitled](../Spring/img/SpringMVC.png)
 
-[[Spring] MVC 동작 방식 이해하기](https://seongwon.dev/Spring/20220621-%EC%8A%A4%ED%94%84%EB%A7%81MVC-%EB%8F%99%EC%9E%91%EB%B0%A9%EC%8B%9D/)
+[[Spring] MVC 동작 방식 이해하기](https://seongwon.dev/Spring-MVC/20220621-%EC%8A%A4%ED%94%84%EB%A7%81MVC-%EB%8F%99%EC%9E%91%EB%B0%A9%EC%8B%9D/)
 
 </details>
 
@@ -271,9 +272,12 @@ Servlet의 단점을 보완하기 위해 만들어진 것이 FrontController Pat
 
 <br>
 
-톰켓은 JAVA EE 기반으로 만들어졌으며 JSP와 Servlet을 구동하기 위한 서블릿 컨테이너 역할을 수행한다. 아파치서버와는 다르게 DB연결, 다른 응용프로그램과 상호 작용 등 동적인 기능들을 사용할 수 있다.
+- 아파치(Apache)는 오픈 소스 소프트웨어 그룹인 아파치 소프트웨어 재단(Apache Software Foundation, ASF)에서 만든 웹서버 프로그램으로 클라이언트 요청이 들어왔을 때만 응답하는 **정적 타입**
+  의 데이터만 처리 가능하다.
+- 톰켓은 JAVA EE 기반으로 만들어졌으며 JSP와 Servlet을 구동하기 위한 서블릿 컨테이너 역할을 수행한다. 아파치서버와는 다르게 DB연결, 다른 응용프로그램과 상호 작용 등 동적인 기능들을 사용할 수 있다.
+- 아파치 톰캣은 무엇일까? 톰캣이 아파치의 기능 일부를 가져와 제공해주는 형태이기에 합쳐서 아파치 톰캣이라고 부르고 있다.
 
-아파치 톰캣은 무엇일까? 톰캣이 아파치의 기능 일부를 가져와 제공해주는 형태이기에 합쳐서 아파치 톰캣이라고 부르고 있다.
+![](img/spring/img_2.png)
 
 </details>
 
@@ -304,6 +308,23 @@ AOP(Aspect Oriented Programming)은 관점 지향 프로그래밍으로 로직�
 **대표적인 예시**
 
 - 스프링의 Transaction
+
+</details>
+
+<details>
+<summary>@Valid 어노테이션은 무엇이며 동작은 어디서 할까?</summary>
+
+<br>
+
+`@Valid` 어노테이션은 잘못된 Requst Body 값에 대해 역직렬화 과정에서 해당 값의 유효성을 검증하는 기술이다.
+
+Valid 어노테이션은 Argument Resolver에서 동작을 한다.
+
+그리고 에러가 발생할 경우 `MethodArgumentNotValidException` 이 발생하게 되어 에러를 핸들링하려면 `ControllerAdvice`에서 해당 에러를 잡아야한다.
+
+![Untitled](img/spring/img_3.png)
+
+[https://seongwon.dev/Spring-MVC/20220622-Valid란/](https://seongwon.dev/Spring-MVC/20220622-Valid란/)
 
 </details>
 
