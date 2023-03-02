@@ -310,3 +310,171 @@ String은 final로 만들어져 인스턴스의 값은 한번 생성하면 변�
 
 </details>
 
+
+<details>
+<summary>제너릭에 대해 설명해주세요</summary>
+
+<br>
+
+- 제네릭은 클래스나 메소드에서 사용할 내부 데이터 타입을 컴파일 시에 미리 지정하는 방법입니다.
+- List와 같이 다양한 종류의 데이터를 관리하는 경우 데이터의 타입을 특정 타입으로 고정할 수 있다.
+
+### Generic의 장점
+
+- 제네릭을 사용하면 잘못된 타입이 들어올 수 있는 것을 컴파일 단계에서 방지할 수 있다.
+- 특정 타입으로 제한함으로써 타입 안정성을 제공한다.
+- 타입 체크와 형변환을 생략할 수 있으므로 코드가 간결해 진다.
+  - 클래스 외부에서 타입을 지정해주기 때문에 따로 타입을 체크하고 변환해줄 필요가 없다. 즉, 관리하기가 편하다.
+- 비슷한 기능을 지원하는 경우 코드의 재사용성이 높아진다.
+
+</details>
+
+<details>
+<summary>자바의 예외에 대해 설명해주세요</summary>
+
+<br>
+
+![Untitled](img/java/img.png)
+
+## Checked Exception
+
+- Exception을 상속하며 Checked Exceptoin 또는 Compile Time Exception이라고 한다.
+- 컴파일 시점에서 Exceptoin을 catch하는지 확인한다.
+  - **컴파일 시점에 Exception에 대한 처리(try/catch)를 하지 않을 경우 컴파일 에러가 발생**한다.
+- Exception이 발생하는 메소드에서 throws 예약어를 활용해 Exception을 호출 메소드에 전달해야 한다.
+
+## Unchecked Exception
+
+- RuntimeException을 상속하며 Runtime Time Exception이라고 한다.
+- 컴파일 시점에 Exception을 catch하는지 확인하지 않아 컴파일 시점에 예외 여부를 확인할 수 없다.
+- Exception이 발생하는 메소드에서 throws 예약어를 활용해 Exception을 처리할 필요가 없다. 하지만 처리해도 무방하다.
+
+## Java Exception
+
+- `Error` : 애플리케이션이 정상적으로 동작하는데 심각한 문제가 있는 경우
+- `Exception` : 비즈니스 로직 상에서 에러가 발생하는 경우 사용한다. Exception을 사용하는 경우 컴파일 시점에 Exception을 확인할 수 있다. Checked Exception이라고도 한다.
+- `RuntimeException` : NumberFormatException과 같이 Runtime 시에 발생하는 에러를 처리하는데 사용한다. Unchecked Exception이라고도 한다.
+
+## 예외 처리 방법
+
+[Java 예외(Exception) 처리에 대한 작은 생각](https://www.nextree.co.kr/p3239/)
+
+- 예외 처리 회피
+- 예외 복구
+- 예외 전환
+
+</details>
+
+<details>
+<summary>상속과 조합은 무엇인가요?</summary>
+
+<br>
+
+## 1. 상속이란?
+
+```java
+import java.util.ArrayList;
+
+import lotto.dto.LottoResult;
+
+public class Lottos extends ArrayList<Lotto> {
+    public LottoResults match(Lotto winningLotto) {
+        LottoResults lottoResults = new LottoResults();
+        this.stream()
+            .map(lotto -> new LottoResult(
+            lotto.getCorrectCount(winningLotto.getNumbers())))
+            .forEach(lottoResults::add);
+        return lottoResults;
+    }
+}
+```
+
+기존에 정의되어 있는 클래스의 필드와 메서드를 물려받아 새로운 클래스를 생성하는 기법이다.
+
+### 상속의 이점
+
+- 중복 코드의 제거와 기능 확장을 쉽게 할 수 있다.
+  - 부모 클래스의 메서드를 사용할 때는 메서드 앞에 클래스 참조를 붙이지 않고  사용할 수 있다. (이것은 앞에 `super`가 생략된 것이다.)
+- 클래스들의 계층적인 구조를 만들 수 있다.
+
+### 상속의 문제점
+
+- 하위 클래스가 상위 클래스의 구현에 의존하여 변경에 취약하다. (상위 클래스의 영향을 받음)
+  - 부모 클래스의 구현을 변경하면 많은 자식 클래스들을 모두 변경해줘야 하는 상황이 생길 수 있다.
+- 상위 클래스의 모든 퍼블릭 메서드가 하위 클래스에도 반드시 노출된다.
+  - 불필요한 메서드도 상속받는 문제가 발생한다.
+
+## 2. 조합이란?
+
+```java
+import java.util.List;
+
+import lotto.dto.LottoResult;
+
+public class Lottos {
+    private List<Lotto> lottos;
+
+    public Lottos(List<Lotto> lottos) {
+        this.lottos = lottos;
+    }
+
+    public LottoResults match(Lotto winningLotto) {
+        LottoResults lottoResults = new LottoResults();
+        lottos.stream()
+                .map(lotto -> new LottoResult(lotto.getCorrectCount(winningLotto.getNumbers())))
+                .forEach(lottoResults::add);
+        return lottoResults;
+    }
+}
+```
+
+조합은 전체를 표현하는 클래스가 부분을 표현하는 객체를 포함해서 부분 객체의 코드를 재사용하는 방법이다.
+
+### 조합의 이점
+
+- 상속과 달리 부분 객체의 내부 구현이 공개되지 않는다.
+- 메서드 호출하는 방식으로 퍼블릭 인터페이스에 의존해서 부분 객체의 내부 구현이 변경되어도 비교적 안전하다.
+- 부분 객체의 모든 퍼블릭 메서드를 공개하지 않아도 된다.
+
+## 3. 상속보다는 무조건 조합이 좋은가?
+
+상속을 무조건 사용하지 말기보다는 내가 사용을 할 때, 내가 어떠한 이유로 상속을 사용하는지 확실하게 알고 사용해야 합니다.
+
+상속의 목적에는 서브타이핑과 서브 클래싱이 존재한다.
+
+- 서브타이핑 - 다형적인 계층구조로 구현, 부모와 자식 행동이 호환된다.
+- 서브클래싱 - 다른 클래스의 코드를 재사용, 부모와 자식 행동이 호환되지 않는다.
+
+이 목적을 생각하며 상속을 고려하기 전에는 두 객체가 서로 Is-a 관계인지, 클라이언트 관점에서 두 객체가 동일한 행동을 할 것이라 기대하는지 고려해봐야 한다.
+
+→ 두가지 질문에 모두 yes일 경우에만 상속을 고려해야한다.
+
+## 4. 정리
+
+- 단순히 코드를 재사용하며 중복코드를 줄이고 싶다면 상속보다는 조합을 고려해야한다.
+- 동일하게 행동하는 인스턴스들을 그룹화 할 경우 상속을 고려할 수 있다.
+
+[[10분 테코톡] 클레이의 상속과 조합](https://www.youtube.com/watch?v=U4OSS4jJ9ns)
+
+</details>
+
+<details>
+<summary>추상화란 무엇일까요?</summary>
+
+<br>
+
+- 추상화란 내부의 동작(How)를 감추고 무엇(What)을 하는지만 드러내어 사용자들이 구현이 아닌 인터페이스에 의존하도록 하는 방법이다.
+- 추상화는 어떤 양상, 세부 사항, 구조를 좀 더 명확하게 이해하기 위해 특정 절차나 물체를 의도적으로 생략하거나 감춤으로써 복잡도를 극복하는 방법이다.
+- 공통의 속성이나 기능을 묶어 이름을 붙이는 것, 객체 지향 관점에 클래스를 정의하는 것을 추상화 라고 할 수 있다. 즉, 불필요한 부분을 생략하고 객체의 속석 중 가장 중요한 것에만 중점을 두어 개략화 하는 것으로 모델화 하는 것으로 데이터의 공통된 성질을 추출하여 슈퍼 클래스를 선정하는 개념이다.
+
+### 추상화의 장점
+
+- 코드의 재사용성(확장성)의 증가
+- 생산성 증가
+- 유지보수성 향상
+
+### 추상화의 단점
+
+- 확장성은 늘어나지만 복잡해질 수 있다.
+
+</details>
