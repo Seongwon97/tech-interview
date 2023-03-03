@@ -558,3 +558,43 @@ public class Lottos {
 [[JAVA] 추상클래스 VS 인터페이스 왜 사용할까? 차이점, 예제로 확인 :: 마이자몽](https://myjamong.tistory.com/150)
 
 </details>
+
+
+<details>
+<summary>불변 객체는 왜 사용할까요?</summary>
+
+<br>
+
+- 오류가 발생할 가능성이 적어져 심리적 안정감이 높아진다.
+- 유지 보수성이 크게 향상된다.
+- 불변 객체를 사용하면 `Map`의 Key값의 변경으로 생기는 ‘식별자 변경(identity mutability)’ 문제가 발생하지 않는다.
+
+    ```java
+    Map<Cash, String> map = new HashMap<>(); 
+    Cash five = new Cash("$5");
+    Cash ten = new Cash("$10");
+    map.put(five, "five");
+    map.put(ten, "ten");
+    five.mul(2);
+    ```
+
+- 객체가 완전하고 견고한 상태이거나 아니면 아예 실패하는 실패 원자성(failure atomicity)을 가진다.
+- 시간에 따라 값이 달라지는 문제점인 시간적 결합(temporal coupling)을 없앨 수 있다.
+- 스레드 안전성이 높아진다.
+  - 객체가 여러 스레드에서 동시에(concurrently) 사용될 수 있고 예측 가능한(predictable) 결과를 보장하는 객체의 품질
+  - 다른 객체를 바라보기 때문에 애초에 쓰레드에 대한 걱정이 없어진다.
+
+</details>
+
+
+<details>
+<summary>익명함수란?</summary>
+
+<br>
+
+익명함수란 일반함수와 다르게 함수형 프로그래밍에서 변수에 함수를 넣는 식으로 사용하는 1회성의 이름이 없는 함수입니다.
+
+일반 함수는 재사용을 위해 생성하여 언제든 호출될 수 있기에 메모리를 차지하고 있다. 하지만 익명 함수는 한 번만 사용하기에 사용하는 순간 외에는 불필요한 메모리 차지를 하지 않아 메모리 관리 측면에서 효과적일 수 있다.
+
+</details>
+
