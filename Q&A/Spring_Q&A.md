@@ -1,17 +1,5 @@
 # Spring Framework
 <details>
-<summary>왜 프레임워크를 사용할까?</summary>
-
-<br>
-
-- 체계적인 코드관리로 유지보수가 용이하다.
-- 기본설계 및 기능 라이브러리를 제공하여 개발 생산성이 높다
-- 코드에 대한 재사용성이 높다
-- 추상화된 코드 제공을 통해 확장성이 좋다.
-
-</details>
-
-<details>
 <summary>왜 스프링을 사용할까?</summary>
 
 <br>
@@ -35,9 +23,11 @@
 
 <br>
 
-- Starter의존성을 제공한다.
+- Starter의존성을 제공하여 dependency 관리가 편리하다.
 - WAS서버를 내장으로 갖고 있어 배포가 편해졌다.
-- XML로 관리하던 설정들을 [application.properties/yml로](http://application.properties/yml로) 쉽게 할 수 있다.
+- Configuration 설정의 편리함
+  - XML로 관리하던 설정들을 [application.properties/yml로](http://application.properties/yml로) 쉽게 할 수 있다.
+  - AutoConfiguration기능을 제공하여 애플리케이션 구동에 필요한 빈들을 자동으로 등록해준다. (`@SpringBootApplication` 어노테이션을 메인 클래스에 붙이면 빈 등록이 자동화된다.)
 
 [[Spring] Spring과 Spring Boot의 차이는 무엇일까?](https://seongwon.dev/Spring/20220628-Spring-vs-SpringBoot/)
 
@@ -291,27 +281,6 @@ Application Context는 Spring내에서 Bean들이 저장되는 context이고 Ser
 </details>
 
 <details>
-<summary>AOP란 무엇일까??</summary>
-
-<br>
-
-AOP(Aspect Oriented Programming)은 관점 지향 프로그래밍으로 로직을 기준으로 핵심적인 관점, 부가적인 관점으로 나누어 보고 그 관점을 기준으로 모듈화하는 기술을 의미한다.
-
-흩어진 관심사를 Aspect로 모듈화하고 핵심적인 비즈니스 로직에서 분리하여 재사용하겠다는 것이 AOP의 취지이다.
-
-**스프링 AOP의 특징**
-
-- 프록시 패턴 기반의 AOP 구현체, 프록시 객체를 쓰는 이유는 접근 제어 및 부가기능을 추가하기 위해서임
-- 스프링 빈에만 AOP를 적용 가능
-- 모든 AOP 기능을 제공하는 것이 아닌 스프링 IoC와 연동하여 엔터프라이즈 애플리케이션에서 가장 흔한 문제(중복코드, 프록시 클래스 작성의 번거로움, 객체들 간 관계 복잡도 증가 ...)에 대한 해결책을 지원하는 것이 목적
-
-**대표적인 예시**
-
-- 스프링의 Transaction
-
-</details>
-
-<details>
 <summary>@Valid 어노테이션은 무엇이며 동작은 어디서 할까?</summary>
 
 <br>
@@ -328,18 +297,6 @@ Valid 어노테이션은 Argument Resolver에서 동작을 한다.
 
 </details>
 
-<details>
-<summary>Spring Event에 대해 설명해주세요</summary>
-
-<br>
-
-이벤트는 말 그대로 애플리케이션 내에서 어떠한 상황이 발생했을 때 발생시킬 수 있는 것이다.
-
-스프링은 기본적으로 Event메커니즘을 제공하고 있다.
-
-이러한 이벤트는 트리거 용도와 시스템간의 동기화 역할에 사용된다. 그리고 잘 사용하면 클래스, 패키지간 의존성 제거에 도움을 줄 수 있다.
-
-</details>
 
 <details>
 <summary>Spring이 어떻게 Filter를 이용할까?</summary>
@@ -363,56 +320,93 @@ Valid 어노테이션은 Argument Resolver에서 동작을 한다.
 
 </details>
 
-``
-# JPA
 <details>
-<summary>JPA에서 영속성 컨텍스트에 대해 설명해주세요</summary>
+<summary>Interceptor란 무엇일까?</summary>
 
 <br>
 
-- **엔티티를 영구 저장하는 환경**이라는 뜻을 가진 **논리적인 개념**으로 어플리케이션과 DB사이에서 객체를 보관하는 가상의 DB같은 역할을 한다. 즉, 애플리케이션에서 DB에 저장하기 전에 사용을 하는 임시 저장 공간이라고 이해를 하면 편할 것이다.
-- 장점
-  - **1차 캐시**
-  - 영속성 컨텍스트 내의 영속 엔티티는 **동일성 보장**
-  - 트랜잭션을 지원하는 **쓰기 지연**
-  - **변경 감지(Dirty Checking)**
-
-</details>
-
-<details>
-<summary>Dirty Checking에 대해 설명해주세요.</summary>
-
-<br>
-
-영속성 컨텍스트는 엔티티의 수정이 일어났을 때 개발자가 영속성 컨텍스트에 따로 알려주지 않아도 알아서 변경 사항을 체크해준다. 이것을 Dirty checking이라고 한다.
-
-1차 캐시에 entity를 저장할 때, 스냅샷 필드도 따로 저장하여 commit이나 flush를 할 때 해당 entity와 스냅샷을 비교하여 변경사항이 있으면 알아서 UPDATE SQL을 만들어서 DB에 전송한다.
-
-</details>
-
-<details>
-<summary>N+1문제를 해결할 수 있는 방법은 무엇이 있을까요?</summary>
-
-<br>
-
-Fetch join, EntityGraph, Batch size
-
-**JoinFetch는 Inner Join, Entity Graph는 Outer Join**
-
-→ 두 방법은 1:N관계에서 데이터가 증가하는 문제가 발생한다.
-
-→ Fetch Join은 OneToMany관계에서 페이징을 하지 못한다
-
-→ 데이터 뻥튀기 때문에 둘 이상의 컬렉션을 페치할 수 없다. (카테시안 곱으로 만들어진다)
-
-> Hibernate 사용 시, 둘 이상의 컬렉션을 사용한 Fetch Join은 오류를 발생시킨다.
+Interceptor는 filter처럼 경로를 지정하여, 해당 경로에 매칭되는 request에 대하여 컨트롤러의 실행 전/후에 동작을 한다. Interceptor는 Filter와 다르게 J2EE의 표준 스펙 기능이 아닌 Spring에서 제공하는 기능이며 둘의 실행 시점이 다르다. Filter는 spring context외부인 dispatcher servlet으로 request가 가기 전에 web context내에서 실행되지만 interceptor은 스프링이 제공하는 기능이라 Spring Context내부에서 dispatcher servlet이 요청을 받은 이후에 실행이 된다.
 
 </details>
 
 
+<details>
+<summary>Filter와 Interceptor는 무엇이 다를까?</summary>
+
+<br>
+
+1. 관리하는 컨테이너, 실행 시점
+  - Filter - Web Container가 관리를 한다.
+  - Interceptor - Spring Container가 관리를 한다.
+  - 동작 - 필터의 경우 Dispatcher Servlet의 실행 전에 동작하며 인터셉터의 경우 Dispatcher Servlet이후, Controller 실행 전에 동작하게 된다.
+2. Request/Response의 조작가능 여부
+  - Filter - 조작 가능하다.
+  - Interceptor - 조작이 불가능하다.
+3. 용도
+  - Filter - 보안 공통 작업과 같이 스프링과 무관하게 전역적으로 처리해야하는 작업들을 처리한다. 또한 이미지 데이터 압축, 문자열 인코딩, 로깅 등의 웹 애플리케이션 전반적으로 사용하는 기술들을 구현하기 좋다.
+  - Interceptor - 인터셉터는 클라이언트 요청과 관련되어 전역적으로 처리해야하는 작업들을 처리할 수 있다. 인터셉터도 필터와 같이 인증/인가와 같은 작업을 하는 것이 일반적이다. 필터와 다른 점이 있다면 인터셉터에서는 모든 요청이 아닌 세부적으로 적용해야하는 인증/인가 작업을 처리하고는 한다. 예시를 하나 들어보자면 낮은 등급의 유저들이 제한되는 서비스들이 존재하다면 그러한 기능들은 인터셉터에서 검사를 하는 것이 적합하다.
+
+   > 필터와 인터셉터는 모두 비즈니스 로직과 분리되어 특정 요구사항(보안, 인증, 인코딩 등)을 만족시켜야 할 때 적용한다.
+   >
+   >
+   > 필터는 스프링과 무관하게 전역적으로 처리해야하는 작업이나, 입력으로 들어온 파라미터 자체를 검증하거나 HttpServletRequest 대신에 ServletRequest를 이용하는 경우 사용하는 것이 좋다. 반대로 인터셉터는 클라이언트의 요청과 관련된 작업에 대해 처리하여야 하거나 서비스 로직을 섞어야 하는 경우 사용하는 것이 좋다.
+>
+
+
+[[Spring] Filter와 Interceptor의 차이 비교](https://seongwon.dev/Spring-MVC/20220627-Filter와Interceptor차이/)
+
+</details>
+
 
 <details>
-<summary>스프링의 트랜잭션</summary>
+<summary>ArgumentResolver란 무엇일까요?</summary>
+
+<br>
+
+ArgumentResolver는 어떠한 요청이 들어왔을 때 요청 객체로부터 원하는 객체를 만들어내는 일을 한다. 이러한 ArgumentResolver는 AOP, Interceptor, Filter와 같이 Spring에서 중복 코드를 제거해주는 장점을 갖고 있다.
+
+e.g. JWT 토큰의 값을 파싱하는 작업
+
+[[Spring] ArgumentResolver란 무엇일까?](https://seongwon.dev/Spring-MVC/20220629-ArgumentResolver란/)
+
+</details>
+
+<details>
+<summary>Spring Event에 대해 설명해주세요</summary>
+
+<br>
+
+이벤트는 말 그대로 애플리케이션 내에서 어떠한 상황이 발생했을 때 발생시킬 수 있는 것이다.
+
+스프링은 기본적으로 Event메커니즘을 제공하고 있다.
+
+이러한 이벤트는 트리거 용도와 시스템간의 동기화 역할에 사용된다. 그리고 잘 사용하면 클래스, 패키지간 의존성 제거에 도움을 줄 수 있다.
+
+</details>
+
+<details>
+<summary>AOP란 무엇일까??</summary>
+
+<br>
+
+AOP(Aspect Oriented Programming)은 관점 지향 프로그래밍으로 로직을 기준으로 핵심적인 관점, 부가적인 관점으로 나누어 보고 그 관점을 기준으로 모듈화하는 기술을 의미한다.
+
+흩어진 관심사를 Aspect로 모듈화하고 핵심적인 비즈니스 로직에서 분리하여 재사용하겠다는 것이 AOP의 취지이다.
+
+**스프링 AOP의 특징**
+
+- 프록시 패턴 기반의 AOP 구현체, 프록시 객체를 쓰는 이유는 접근 제어 및 부가기능을 추가하기 위해서임
+- 스프링 빈에만 AOP를 적용 가능
+- 모든 AOP 기능을 제공하는 것이 아닌 스프링 IoC와 연동하여 엔터프라이즈 애플리케이션에서 가장 흔한 문제(중복코드, 프록시 클래스 작성의 번거로움, 객체들 간 관계 복잡도 증가 ...)에 대한 해결책을 지원하는 것이 목적
+
+**대표적인 예시**
+
+- 스프링의 Transaction
+
+</details>
+
+<details>
+<summary>스프링의 트랜잭션에 대해 설명해주세요</summary>
 
 <br>
 
@@ -505,5 +499,49 @@ DefaultTransactionDefinition에 설정된 격리수준은 ISOLATION_DEFAULT로 D
 - [[Spring] Spring 트랜잭션의 세부 설정(전파 속성, 격리수준, 읽기전용, 롤백/커밋 예외 등) - (2/3)](https://mangkyu.tistory.com/169)
 - [[10분 테코톡] 후니의 스프링 트랜잭션](https://www.youtube.com/watch?v=cc4M-GS9DoY)
 
+</details>
+
+# JPA
+<details>
+<summary>JPA에서 영속성 컨텍스트에 대해 설명해주세요</summary>
+
+<br>
+
+- **엔티티를 영구 저장하는 환경**이라는 뜻을 가진 **논리적인 개념**으로 어플리케이션과 DB사이에서 객체를 보관하는 가상의 DB같은 역할을 한다. 즉, 애플리케이션에서 DB에 저장하기 전에 사용을 하는 임시 저장 공간이라고 이해를 하면 편할 것이다.
+- 장점
+  - **1차 캐시**
+  - 영속성 컨텍스트 내의 영속 엔티티는 **동일성 보장**
+  - 트랜잭션을 지원하는 **쓰기 지연**
+  - **변경 감지(Dirty Checking)**
+
+</details>
+
+<details>
+<summary>Dirty Checking에 대해 설명해주세요.</summary>
+
+<br>
+
+영속성 컨텍스트는 엔티티의 수정이 일어났을 때 개발자가 영속성 컨텍스트에 따로 알려주지 않아도 알아서 변경 사항을 체크해준다. 이것을 Dirty checking이라고 한다.
+
+1차 캐시에 entity를 저장할 때, 스냅샷 필드도 따로 저장하여 commit이나 flush를 할 때 해당 entity와 스냅샷을 비교하여 변경사항이 있으면 알아서 UPDATE SQL을 만들어서 DB에 전송한다.
+
+</details>
+
+<details>
+<summary>N+1문제를 해결할 수 있는 방법은 무엇이 있을까요?</summary>
+
+<br>
+
+Fetch join, EntityGraph, Batch size
+
+**JoinFetch는 Inner Join, Entity Graph는 Outer Join**
+
+→ 두 방법은 1:N관계에서 데이터가 증가하는 문제가 발생한다.
+
+→ Fetch Join은 OneToMany관계에서 페이징을 하지 못한다
+
+→ 데이터 뻥튀기 때문에 둘 이상의 컬렉션을 페치할 수 없다. (카테시안 곱으로 만들어진다)
+
+> Hibernate 사용 시, 둘 이상의 컬렉션을 사용한 Fetch Join은 오류를 발생시킨다.
 
 </details>
