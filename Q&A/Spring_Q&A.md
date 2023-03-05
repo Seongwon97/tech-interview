@@ -503,16 +503,133 @@ DefaultTransactionDefinition에 설정된 격리수준은 ISOLATION_DEFAULT로 D
 
 # JPA
 <details>
+<summary>ORM이란 무엇일까요?</summary>
+
+<br>
+
+ORM은 **Object Relational Mapping**의 약자로 **객체와 관계형 데이터베이스의 데이터를 자동으로 매핑**해주는 일을 한다. 객체지향 프로그래밍은 클래스를 사용하고 관계형 데이터베이스는 테이블을 사용하여 두 모델간에 불일치가 발생하게 된다. 이러한 문제는 ORM이 중간에서 객체간의 관계를 바탕으로 RDB와 매핑하여 불일치를 해결해줄 수 있다.
+
+[[JPA] JPA란?](https://seongwon.dev/Spring-MVC/20220705-JPA란/)
+
+</details>
+
+<details>
+<summary>ORM의 장점과 단점을 설명해주세요.</summary>
+
+<br>
+
+### 장점
+
+- 객체 지향적인 코드로 인해 더 직관적이고 비즈니스 로직에 더 집중할 수 있게 도와준다.
+- 재사용 및 유지보수의 편리성이 증가한다.
+- DBMS에 대한 종속성이 줄어든다.
+
+### 단점
+
+- 완벽한 ORM 으로만 서비스를 구현하기가 어렵다.
+- 프로시저가 많은 시스템에선 ORM의 객체 지향적인 장점을 활용하기 어렵다.
+
+[[JPA] JPA란?](https://seongwon.dev/Spring-MVC/20220705-JPA란/)
+
+</details>
+
+<details>
+<summary>JPA, Hibernate란?</summary>
+
+<br>
+
+JPA(Java Persistence API)란 자바에서 사용하고 있는 ORM의 표준이다. JPA는 구현체가 아닌 인터페이스의 모음으로, JPA의 인터페이스를 구현한 대표적인 오픈소스로는 Hibernate, EclipseLink, DataNucleus가 있다.
+
+> **Hibernate**
+>
+> - JPA의 실제 구현 class를 모아둔 것이 Hibernate이다.
+> - JPA라는 ORM 기술 표준을 구현한 것이 Hibernate이므로, JPA를 사용하려면 개발자는 Hibernate를 사용하면 된다.
+> - Hibernate에서 자주 사용하는 것들을 Spring boot가 묶어서 보관하는데 그것이 Spring data jpa이다.
+
+[[JPA] JPA란?](https://seongwon.dev/Spring-MVC/20220705-JPA란/)
+
+</details>
+
+<details>
+<summary>왜 JPA를 사용해야할까?</summary>
+
+<br>
+
+- SQL 중심적인 개발에서 객체 중심으로 개발
+- 생산성 향상
+- 유지보수성 증가 (e.g. 테이블 필드 추가시 JPA는 엔티티 객체에 필드만 추가하면 된다.)
+- 객체와 RDBMS간의 패러다임 불일치 해결
+  - 상속, 연관관계 설정, 객체 그래프 탐색, 지연로딩 등
+- 1차 캐시와 쓰기지연 저장소, 지연로딩 등의 기술로 성능 차이가 별로 없다.
+- 데이터 접근을 추상화하여 애플리케이션 코드와 벤더 사이의 독립성을 보장한다.
+
+[[JPA] JPA란?](https://seongwon.dev/Spring-MVC/20220705-JPA란/)
+
+</details>
+
+<details>
 <summary>JPA에서 영속성 컨텍스트에 대해 설명해주세요</summary>
 
 <br>
 
 - **엔티티를 영구 저장하는 환경**이라는 뜻을 가진 **논리적인 개념**으로 어플리케이션과 DB사이에서 객체를 보관하는 가상의 DB같은 역할을 한다. 즉, 애플리케이션에서 DB에 저장하기 전에 사용을 하는 임시 저장 공간이라고 이해를 하면 편할 것이다.
-- 장점
-  - **1차 캐시**
-  - 영속성 컨텍스트 내의 영속 엔티티는 **동일성 보장**
-  - 트랜잭션을 지원하는 **쓰기 지연**
-  - **변경 감지(Dirty Checking)**
+
+### 영속성 컨텍스트의 특징
+
+- 1차 캐시
+- 영속성 컨텍스트 안에서 영속 엔티티들의 동일성을 보장
+- 트랜잭션내부에서의 쓰기 지연
+- 변경 감지(Dirty Checking)
+
+[[JPA] 엔티티 생명주기와 영속성 컨텍스트](https://seongwon.dev/Spring-MVC/20220706-엔티티-생명주기와-영속성-컨텍스트/)
+
+</details>
+
+<details>
+<summary>영속성 컨텍스트의 값이 DB에 반영(Flush)되는 경우는 어떤 상황이 있을까요?</summary>
+
+<br>
+
+- flush를 통해 개발자가 직접 반영하는 경우
+- Transaction이 끝나서 해당 query가 commit되는 시점
+- 복잡한 조회 조건에 JPQL query가 실행되는 시점(JPQL 쿼리 실행 - 플러시 자동 호출)
+
+[[JPA] 엔티티 생명주기와 영속성 컨텍스트](https://seongwon.dev/Spring-MVC/20220706-엔티티-생명주기와-영속성-컨텍스트/)
+
+</details>
+
+<details>
+<summary>EntityManager는 여러 스레드에서 공유할까요?</summary>
+
+<br>
+
+No!!!!
+
+하나의 스레드에서 데이터를 수정하고 있는데 다른 스레드에서 동일한 EntityManager를 통해 데이터를 수정하는 등의 문제가 발생하면 안되기에 EntityManager는 공유되면 안된다. 그리고 이러한 EntityManager를 만들어주는 것이 바로 EntityFactory이다.
+
+애플리케이션에는 하나의 **EntityManagerFactory**가 존재한다. 이는 디비에 접근하는 트랜잭션이 생길 때 쓰레드 별로 **Entity Manager**를 생성하여 영속성 컨텍스트에 접근하도록 해준다.
+
+</details>
+
+<details>
+<summary>Entity의 생명주기에 대해 설명해주세요</summary>
+
+<br>
+
+![Untitled](img/spring/img_4.png)
+
+- **비영속(new/transient)**
+  - 영속성 컨텍스트와 전혀 관계가 없는 상태이다.
+  - 엔티티 객체를 생성하였지만 아직 영속성 컨텍스트에 저장하지 않은 상태를 의미한다.
+- **영속(managed)**
+  - 영속성 컨텍스트에 저장된 상태
+  - 엔티티가 영속성 컨텍스트에 의해 관리된다.
+  - 영속 상태가 되었다고 바로 DB에 값이 저장되지 않고 트렌젝션의 커밋 시점에 영속성 컨텍스트에 있는 정보들을 DB에 쿼리로 날리게 된다.
+- **준영속(detached)**
+  - 영속성 컨텍스트에 저장되었다가 분리되어 영속성 컨텍스트가 제공하는 기능을 사용을 못하는 상태이다.
+    - 1차 캐시, 쓰기 지연, 변경 감지, 지연 로딩을 포함한 영속성 컨텍스트가 제공하는 어떠한 기능도 동작하지 않는다.
+- **삭제(removed):**
+  - 영속성 컨텍스트와 DB에서 해당 엔티티를 삭제하여 삭제된 상태이다.
 
 </details>
 
