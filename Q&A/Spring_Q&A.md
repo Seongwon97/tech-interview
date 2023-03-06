@@ -645,6 +645,37 @@ No!!!!
 </details>
 
 <details>
+<summary>JPA에서 발생할 수 있는 문제들</summary>
+
+<br>
+
+- N+1문제
+- 2개 이상의 OneToMany
+- OneToMany에서 Pagenation을 할 경우
+
+</details>
+
+<details>
+<summary>Fetch Join과 Limit을 같이 사용하면 어떤 문제가 발생할까?</summary>
+
+<br>
+
+OneToMany관계에서 Fetch Join과 Limit절을 같이 사용하면 필요한 데이터만을 가져오는 것이 아니라 모든 데이터를 가져온 후 JVM상에서 필요한 데이터만을 가공하여 사용자에게 반환하게 된다.
+
+이러한 이유는 RDBMS와 JPA의 패러다임의 차이에서 발생하게 된다. RDMBS는 테이블의 Row단위로 데이터를 바라보며 JPA는 객체 단위로 데이터를 바라본다. 이러한 패러다임의 불일치를 가진 상태로 OneToMany의 관계에서 Join을 하게 된다면 테이블에서는 데이터가 불어나서 JPA는 모든 데이터를 JVM상으로 읽어온 후에 데이터를 가공하도록 동작하고 있다.
+
+해결방안
+
+- OneToMany를 ManyToOne의 관계로 조회
+- 필요한 Id를 조회하는 쿼리를 실행한 후, ID를 통해 다시 조회하는 쿼리를 실행
+- DTO를 통해 필요한 데이터만 조회
+
+[Fetch Join과 limit을 같이 사용하며 발생한 문제 - [WARN] firstResult/maxResults specified with collection fetch; applying in memory!](https://seongwon.dev/Spring-MVC/20220930-FetchJoin과-limit을-같이-사용하며-발생한-문제/)
+
+</details>
+
+
+<details>
 <summary>N+1문제를 해결할 수 있는 방법은 무엇이 있을까요?</summary>
 
 <br>
