@@ -767,3 +767,52 @@ InnoDB는 변경해야 할 인덱스 페이지가 Buffer Pool에 있으면 바�
 [Table 작성 시 PK를 무조건 사용해야 하는 이유 - 기술 블로그](https://hodongman.github.io/2019/01/14/Database-PK를-사용해야-하는-이유.html)
 
 </details>
+
+### DBCP, HikariCP
+<details>
+<summary>DB Connection Pool은 무엇이며 왜 필요할까요?</summary>
+
+<br>
+
+애플리케이션이 DB와의 통신을 하기 위해 매번 새로운 커넥션을 맺는 것은 네트워크 관점에서도 데이터베이스 관점에서도 매우 비효율적이다. 이를 해결하기 위해 데이터베이스 커넥션 풀이 만들어졌다.
+
+DB 커넥션 풀은 DB 커넥션을 여러개 생성하여 풀(Pool)에 저장하였다가 클라이언트의 요청이 올 때 커넥션 객체를 빌려주고 작업이 완료되면 다시 커넥션을 반납하여 풀에 저장하는 프로그래밍 기법이다.
+
+**장점**
+
+- DB Connection 객체를 미리 만들어 풀에 등록한 후, 재사용하기 때문에 커넥션의 생성, 삭제와 같은 비용이 큰 작업 없이 빠르게 DB에 접속할 수 있다.
+- DB Connection 수를 제한할 수 있어서 과도한 접속으로 인한 서버의 자원 고갈 방지가 가능하다.
+- DB 접속 모듈을 공통화하여 DB 서버의 환경이 바뀔 경우 쉬운 유지보수가 가능하다.
+
+[DB Connection Pool (DBCP) (feat.HikariCP)](https://seongwon.dev/Database/20221002-DB_Connection_Pool/)
+
+</details>
+
+<details>
+<summary>HikariCP란 무엇일까요?</summary>
+
+<br>
+
+- HikariCP란 **Spring에서 default로 사용하고 있는 JDBC Connection Pool이다.**
+- HikariCP란 Brett Wooldridge가 2012년에 개발한 JDBC Connection Pool이다. 이는 zero-overhead라고 홍보를 하고 있을 정도로 매우 가볍고, 빠르고 안정적이다.
+
+</details>
+
+<details>
+<summary>HikariCP의 동작 원리에 대해 설명해주세요</summary>
+
+<br>
+
+> DBCP는 Thread가 Connection을 요청하면 Connection Pool에서 각자의 Connection 반환 방식에 따라서 현재 사용중이지 않은 Connection을 반환한다.
+>
+
+HikariCP의 경우 이전에 사용하였던 Connection이 있으면 해당 Connection을 반환하는 것을 우선적으로 진행하고 있다.
+
+만약 Connection을 요청하였을 때, 사용 가능한 Connection이 없을 경우 HandOffQueue에 해당 요청을 넣으며 다른 Thread에서 사용을 마치고 Connection이 반납되기를 기다린다. 만약 Timeout 시간동안 반납된 Connection이 없다면 예외가 던져지게 된다. Timeout이 발생하기 전에 다른 Thread로부터 Connection이 반납되면 Connection을 Queue에 넣어 Conneciton을 기다리는 Thread가 Connection을 획득하여 작업을 진행하도록 한다.
+
+> 그림과 함께 이해를 하고 싶다면 아래의 링크를 참조해주세요
+>
+>
+> [DB Connection Pool (DBCP) (feat.HikariCP)](https://seongwon.dev/Database/20221002-DB_Connection_Pool/#dbcp의-동작-원리-hikaricp)
+
+</details>
