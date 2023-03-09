@@ -659,16 +659,111 @@ MySQL InnoDB의 경우 기본적으로 클러스터링 테이블을 생성하여
 
 </details>
 
+
+### MySQL
 <details>
-<summary></summary>
+<summary>MySQL InnoDB의 Undo 영역과 Redo 영역에 대해 설명해 주세요.</summary>
 
 <br>
+
+### UNDO LOG
+
+- Undo Log 란 실행 취소 로그 레코드의 집합으로 Transaction 실행후 Rollback 시 Undo Log 를 참조해 이전 데이터로 복구할수 있도록 로깅 해놓은 영역이다. 쉽게 말하면 Update, Delete 연산으로 데이터를 변경하였을 때, 변경되기 전의 데이터를 보관하는 곳이다.
+- 트랜잭션의 롤백 대비용과 트랜잭션 격리용으로 이용한다.
+- 언두영역은 필요로 하는 트랜잭션이 없을 때 삭제된다.
+- 동작은 데이터의 변경 쿼리(Update, Delete)쿼리가 발생하면 Undo Log에 변경 전의 데이터를 기록하고 InnoDB Buffer Pool의 데이터를 업데이트한다. 이후, 다른 트랜잭션이 해당 데이터에 접근한다면 설정된 격리 수준에 따라 Undo Log에 있는 데이터를 접근한다.
+- Undo log도 Redo log와 마찬가지로 Log Buffer에 기록한다.
+  - PK값과 변경되기 전의 데이터 값을 저장한다. (변경한 컬럼만 저장)
+- Undo log는 Checkpoint시 디스크에 기록된다.
+
+![Untitled](img/database/img_3.png)
+
+### REDO LOG
+
+- DB 장애 발생시 복구에 사용되는 Log로 MySQL 장애시 Buffer Pool에 저장되어 있던 데이터의 유실을 방지(데이터 복구)하기 위해 사용된다.
+- Redo Log를 알기 위해서는 InnoDB의 Buffer Pool 동작 원리를 조금 알아야 한다.
+  - MySQL은 Commit이 발생하면 Disk I/O작업을 줄이기 위해 디스크 영역으로 저장하는 것이 아닌 메모리 영역인 (Buffer Pool & Log Buffer)에 데이터가 들어간다. 이때 Buffer Pool은 메모리 공간이기에 MySQL 장애시 Buffer Pool의 내용은 사라지게 된다.
+  - Commit이 발생하였을 때, 바로 Disk에저장하지 않아 에러가 발생하였을 때, 이전의 작업 내용을 복구하기 위해 Undo Log를 사용한다.
+
+    > InnoDB Buffer Pool은 InnoDB엔진이 Table Caching및 Index Data Caching을 위해 사용하는 메모리 공간이다.
+>
+- Redo Log는 Redo log buffer와 Redo log file을 통해 동작한다.
+  - 데이터의 변경이 발생하면 MySQL은 먼저 메모리에 위치한 Redo log buffer에 변경된 데이터를 기록한다. → Redo log buffer도 메모리 공간이라 MySQL장애가 발생하면 데이터가 사라진다. 그래서 디스크에 위치한 Redo log file에 데이터를 백업해두는 작업을 진행한다.
+  - Redo log buffer는 checkpoint 이벤트가 발생하면 Redo log buffer에 있던 데이터를 Redo log file로 저장하게 된다.
+  - 에러가 발생하면 Redo log buffer에 있는 데이터를 통해 복구를 진행한다.
+
+    > Checkpoint이전에 장애가 발생하면 복구 불가
+  >
+
+  > Redo log buffer가 Redo log file로 데이터를 저장하는 LGWR 프로세스가 동자할 때
+  >
+  > - 데이터베이스 커밋(commit)이 수행되었을 때
+  > - 리두 로그 버퍼가 1/3이상 찼을 때
+  > - DBWR이 변경된 데이터 블록을 저장하기 전
+  > - 3초마다
+  > - `LOG_CHECKPOINT_TIMEOUT`파라미터 설정 시간에 의해 TIME-OUT이 발생할 때
+
+![Untitled](img/database/img_4.png)
+
+[Mysql Redo / Undo Log](https://velog.io/@pk3669/Mysql-Redo-Undo-Log)
 
 </details>
 
 <details>
-<summary></summary>
+<summary>MySQL의 Insert Buffer란?</summary>
 
 <br>
+
+레코드가 Insert, Update되었을 때, 데이터의 변경 뿐만 아니라 인덱스를 업데이트 하는 작업도 필요하다.
+
+InnoDB는 변경해야 할 인덱스 페이지가 Buffer Pool에 있으면 바로 업데이트를 수행하지만, 그렇지 않을 경우 Disk로부터 페이지를 읽어온 후 업데이트를 해야해서 이를 즉시 수행하지 않고 임시저장공간인 인서트 버퍼(Insert Buffer)에 저장해두고 결과는 바로 사용자에게 바로 반환하는 형태로 성능을 향상시켰다.
+
+> 즉, Index에 대한 업데이트 작업은 Insert Buffer에 지연시키고 사용자에게는 작업이 완료되었다고 먼저 통보를 한다.
+
+</details>
+
+<details>
+<summary>MySQL InnoDB의 MVCC에 대해 설명해주세요</summary>
+
+<br>
+
+- MVCC(Multi Version Concurrency Control)는 하나의 레코드에 대해 2개의 버전이 유지되고, 필요에 따라 보여지는 데이터가 다른 구조를 의미한다.
+- 트랜잭션 격리수준에서 READ_UNCOMMITTED를 제외한 상위 레벨의 격리수준의 경우 커밋되지 않은 데이터는 다른 트랜잭션에서 볼 수 없기에 InnoDB Buffer pool이나 Disk에 있는 내용 대신 Undo Log에 기록해준 변경되기 이전의 데이터를 반환해주는데 이러한 과정을 MVCC라고 한다.
+
+</details>
+
+<details>
+<summary>MySQL 락에 대해 설명해주세요</summary>
+
+<br>
+
+> InnoDB 스토리지 엔진의 락
+>
+
+**레코드(Record) 락**
+
+- 레코드 락이란 레코드 자체만을 잠그는 것을 의미한다. InnoDB 스토리지 엔진은 레코드 자체가 아니라 인덱스의 레코드를 잠그는 방식으로 동작한다.
+
+**갭(GAP) 락**
+
+- 갭 락은 레코드 자체가 아니라 레코드와 바로 인접한 레코드 사이의 간격을 잠그는 것을 의미한다. 갭 락의 역할은 레코드와 레코드 사이의 간격에 새로운 레코드가 생성되는 것을 제어한다.
+
+**넥스트 키 락(Next key lock)**
+
+- 레코드 락과 갭 락을 합쳐놓은 것을 의미한다.
+
+</details>
+
+<details>
+<summary>MySQL에서 기본키를 설정하지 않고 테이블을 만들면 어떻게 될까요?</summary>
+
+<br>
+
+- 기본값인 innoDB엔진은 데이터를 저장하고 indexing하기 위해 PK를 요구한다. 그래서 PK를 지정하지 않을 경우 auto_increment 속성의 사용자에게 노출되지 않는 hidden PK가 생성된다.
+- 하지만 해당 속성의 경우 데이터 관리를 하는데 어려움이 있어 명시적으로 설정하는 것이 좋다.
+  - 기본키와 Unique제약조건이 없는 테이블을 만들경우, 데이터를 사용할 때 자동으로 만들어지는 PK를 사용하지 않게 되고 secondary index도 없는 테이블이 만들어진다. 그 결과 조회, 삭제와 같은 연산을 수행할 때 사용할 적절한 Index가 없어 성능 저하가 발생한다.
+  - 기본키가 없을 경우 테이블간의 관계 모델링을 하는 것이 일반적으로 불가능하다.
+
+[Table 작성 시 PK를 무조건 사용해야 하는 이유 - 기술 블로그](https://hodongman.github.io/2019/01/14/Database-PK를-사용해야-하는-이유.html)
 
 </details>
