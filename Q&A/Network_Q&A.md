@@ -159,7 +159,7 @@ Timeout은 네트워크 상에 심각한 혼잡이라고 판단하여 Window siz
 </details>
 
 <details>
-<summary>흐름제어기법중 슬라이딩 윈도우 방식에대해 설명해주세요.</summary>
+<summary>흐름제어기법중 슬라이딩 윈도우 방식에대해 설명해주세요.(추가 필요)</summary>
 
 <hr>
 
@@ -284,8 +284,73 @@ OSI 7 계층은 네트워크 프로토콜이 통신하는 구조를 7개의 �
 <hr>
 </details>
 
-- 웹 서버 소프트웨어(Apache, Nginx)는 OSI 7계층 중 어디서 작동하는지 설명해보세요.
-- 웹 서버 소프트웨어(Apache, Nginx)의 서버 간 라우팅 기능은 OSI 7계층 중 어디서 작동하는지 설명해보세요.
+<details>
+<summary>인캡슐레이션과 디캡슐레이션에 대해 설명해주세요.</summary>
+
+<hr>
+
+![Untitled](img/network/encapsulation.png)
+
+**인캡슐레이션(Encapsulation)**
+
+- 상위 계층에서 하위 계층으로 데이터를 보내면 물리 계층에서 전기 신호 형태로 네트워크를 통해 신호를 보내는 과정을 의미한다.
+    - 상위 계층에서 내려오며 OSI 7계층을 기준으로 4, 3, 2 계층은 각각 네트워크 전송에 있어 자신이 필요한 정보를 헤더에 붙여서 보낸다.
+    - 헤더에 붙이는 정보는 우리가 알아볼 수 있는 문자가 아닌 미리 정의된 비트 단위로 쓴다.
+
+**디캡슐레이션(Decapsulation)**
+
+- 하위 계층에서 상위 계층으로 데이터를 보내는 과정을 의미한다.
+    - 상위 계층으로 디캡슐레이션하면서 각각 계층에서 추가된 헤더를 벗겨내며 정보를 확인한다.
+
+📌 헤더에 아래의 정보는 반드시 포함되어 있어야 한다.
+
+- **현재 계층에서 정의하는 정보**
+    - 4계층의 목적은 큰 데이터를 잘 분할하고 받는 쪽에서 잘 조립하는 것이다. 시퀀스, 애크 번호와 같이 데이터의 순서와 누락된 패킷이 없는지 확인하는데 필요한 정보를 헤더에 적어 넣는다.
+    - 3계층 헤더에는 3계층에서 정의하는 논리적인 주소인 **출발지, 도착지 IP 주소**를 헤더에 적어둔다.
+    - 2계층은 MAC 주소를 정의하는데 3계층처럼 2계층도 **출발지, 도착지 MAC 주소** 정보를 헤더에 넣습니다.
+- **상위 프로토콜 지시자**
+
+  > 인캡슐레이션 과정에서는 상위 프로토콜이 많아도 문제가 없지만 디캡슐레이션하는 목적지 쪽에서는 헤더에 아무 정보가 없으면 어떤 상위 프로토콜로 올려보내 줘야 할지 결정할 수 없다. 그래서 헤더에 상위 프로토콜 지지자는 필수적으로 기재해야 한다.
+  >
+
+  > 각 계층마다 상위 프로토콜 지지자를 갖고 있지만 이름이 달라 4계층은 포트 번호(Port Number), 3계층은 프로토콜 번호(Protocol Number), 2계층은 이더 타입(Ether type)이라고 부른다.
+  >
+  > - 포트번호는 4계층 헤더에 기재되었지만 애플리케이션 계층에서 프로토콜 종류를 나타내주는 정보이다.
+
+<hr>
+</details>
+
+
+<details>
+<summary>TCP/IP란 무엇일까요?</summary>
+
+<hr>
+
+TCP/IP는 **인터넷 프로토콜 스위트**로 온라인상의 안전하고 효율적인 데이터 전송의 필수 요건을 정의한다.
+
+> 인터넷 프로토콜 스위트(Internet Protocol Suite)는 인터넷에서 컴퓨터들이 서로 정보를 주고받는데 쓰이는 통신규약(프로토콜)의 모음이다.
+>
+
+> 인터넷 프로토콜 중 TCP와 IP가 가장 많이 쓰이기 때문에 TCP/IP 프로토콜 슈트라고 불린다. (거의 현대 네트워크의 대부분이 TCP/IP와 이더넷으로 이루어져있다.)
+>
+
+TCP/IP는 패킷 통신 방식의 인터넷 프로토콜인 IP (인터넷 프로토콜)와 전송 조절 프로토콜인 TCP (전송 제어 프로토콜)로 이루어져 있다. IP는 패킷 전달 여부를 보증하지 않고, 패킷을 보낸 순서와 받는 순서가 다를 수 있다. TCP는 IP 위에서 동작하는 프로토콜로, 데이터의 전달을 보증하고 보낸 순서대로 받게 해준다. HTTP, FTP, SMTP 등 TCP를 기반으로 한 많은 수의 애플리케이션 프로토콜들이 IP 위에서 동작하기 때문에, 묶어서 TCP/IP로 부르기도 한다.
+
+즉, TCP/IP를 사용한다는 것은 송신자가 수신자에게 IP 주소를 사용하여 데이터를 전달하고 해당 전송의 신뢰성은 TCP를 통해 유지하게 된다.
+
+### OSI와 비교
+
+두 모델은 관련은 있으나 서로 완전히 들어맞지는 않는다.
+
+가장 큰 차이는 계층의 수다. OSI 7계층과 다르게 4계층으로 구분되어 있다.
+
+![Untitled](img/network/tcp-ip.png)
+
+### Reference
+- [https://aws-hyoh.tistory.com/entry/TCPIP-쉽게-이해하기](https://aws-hyoh.tistory.com/entry/TCPIP-쉽게-이해하기)
+
+<hr>
+</details>
 
 ## Http/Https란?
 <details>
@@ -294,9 +359,9 @@ OSI 7 계층은 네트워크 프로토콜이 통신하는 구조를 7개의 �
 <hr>
 
 - 서버/클라이언트 모델을 따라 데이터를 주고받기 위한 프로토콜이다.
-- 인터넷 상에서 하이퍼텍스트를 교환하기 위해 통신규약으로 80포트를 사용하고 있다.
-- OSI 7계층 중에서는 애플리케이션 레벨에 속하며 TCP/IP위에서 작동한다.
-- 상태를 갖고 있지 않은 Stateless 프로토콜이며 Method, Path, Version, Header, Body 등으로 구조가 구성되어 있다.
+- 인터넷 상에서 하이퍼텍스트를 교환하기 위해 **통신규약으로 80포트를 사용**하고 있다.
+- OSI 7계층 중에서는 **7계층인 애플리케이션 레벨**에 속하며 TCP/IP위에서 작동한다.
+- 상태를 갖고 있지 않은 **Stateless 프로토콜**이며 Method, Path, Version, Header, Body 등으로 구조가 구성되어 있다.
 
 <hr>
 </details>
@@ -332,7 +397,8 @@ OSI 7 계층은 네트워크 프로토콜이 통신하는 구조를 7개의 �
 - Connection: **Multiplexed Streams**
     - 한 Connection으로 동시에 여러 개 메시지를 주고 받을 수 있으며, Response는 순서에 상관없이 stream으로 주고받는다.
 
-[HTTP 프로토콜 1.0 vs 1.1 vs 2.0 비교](https://hirlawldo.tistory.com/106)
+### Reference
+- [HTTP 프로토콜 1.0 vs 1.1 vs 2.0 비교](https://hirlawldo.tistory.com/106)
 
 <hr>
 </details>
@@ -366,7 +432,8 @@ OSI 7 계층은 네트워크 프로토콜이 통신하는 구조를 7개의 �
 5. 서버는 개인키로 암호화된 세션키를 복호화하여 세션키를 얻는다.
 6. 브라우저와 서버는 동일한 세션키를 공유함으로 데이터를 전달할 때 세션키로 암호화/복호화를 진행한다.
 
-[2022-ConquerCS/HTTP vs HTTPS.md at main · woowacourse-study/2022-ConquerCS](https://github.com/woowacourse-study/2022-ConquerCS/blob/main/2%EC%A3%BC%EC%B0%A8/%EB%A0%89%EC%8A%A4/HTTP%20vs%20HTTPS.md)
+### Reference
+- [2022-ConquerCS/HTTP vs HTTPS.md at main · woowacourse-study/2022-ConquerCS](https://github.com/woowacourse-study/2022-ConquerCS/blob/main/2%EC%A3%BC%EC%B0%A8/%EB%A0%89%EC%8A%A4/HTTP%20vs%20HTTPS.md)
 
 <hr>
 </details>
@@ -402,6 +469,9 @@ OSI 7 계층은 네트워크 프로토콜이 통신하는 구조를 7개의 �
   - 단적인 예로는 페이지 로딩을 위해 html, js, css 등의 파일을 로드할 때 N번의 3way handshaking이 필요했다.
   - 지금은 http 지속 연결(Persistent Connections)로 문제 해결
 
+### Reference
+- [[WEB] 🌐 Stateful / Stateless 차이 💯 정리](https://inpa.tistory.com/entry/WEB-%F0%9F%93%9A-Stateful-Stateless-%EC%A0%95%EB%A6%AC)
+
 <hr>
 </details>
 
@@ -411,9 +481,40 @@ OSI 7 계층은 네트워크 프로토콜이 통신하는 구조를 7개의 �
 
 <hr>
 
-HTTPS를 위해 사용되는 암호화기반의 인터넷 보안 프로토콜이다. 이는 전달되는 모든 데이터를 암호화하고 사이버 공격도 차단한다.
+HTTPS를 위해 사용되는 **암호화기반의 인터넷 보안 프로토콜**이다. 이는 전달되는 모든 데이터를 암호화하고 사이버 공격도 차단한다.
 
 둘의 차이 SSL은 1996년 이후 업데이트 되지 않고 사라지고 있다. 그렇기에 취약성도 있어 사용 중단을 권장하고 있다. 이를 대체할 것이 바로 TLS이다. TLS는 SSL의 업데이트 버전이다.
+
+<hr>
+</details>
+
+
+<details>
+<summary>SSL/TLS Handshaking에 대해 설명해보세요</summary>
+
+<hr>
+
+![Untitled](img/network/ssl-handshaking.png)
+
+1. ***ClientHello(암호화 알고리즘 나열 및 전달)***: 클라이언트가 서버에 연결을 시도하며 전송하는 패킷이다. 자신이 사용가능한 Cyper Suite 목록, SessionID, SSL 프로토콜 버전, Random Byte등을 전달한다.
+
+   > Cipher Suite는 SSL 프로토콜 버전, 인증서 검정, 데이터 암호화 프로토콜, Hash 방식 등의 정보를 담고 있는 존재이다.
+
+2. ***ServerHello(암호화 알고리즘 선택)***:  서버는 클라이언트가 보낸 ClientHello 패킷을 받아 CyperSuite 중 하나를 선택한 후 자신의 SSL 프로토콜 버전 등과 함께 다음 클라이언트에게 보낸다.
+
+   > ClientHello에서 보낸 Cyper Suite는 여러개이지만 ServerHello에서는 서버가 한개만을 선택하여 보내기에 1개의 CyperSuite가 들어있다.
+
+3. ***Server Certificate(인증서 전달)***: Server는 자신의 Server가 발행한 공개키가 들어있는 SSL인증서를 클라이언트에게 전달한다. 클라이언트는 서버가 보낸 CA의 개인키로 암호화된 SSL인증서를 CA에 등록되어있는 공개키를 사용해 복호화한다. 복호화에 성공하면 인증서는 CA가 서명한 것이 맞으니 유효성 검증이 되는 것이다.
+    1. ***Server Key Exchange / ServerHello Done***:  서버의 공개키가 SSL 인증서 내부에 없는 경우 서버가 직접 전달하겠다는 뜻으로 공개키가 SSL 인증서 내부에 있을 경우 Server KeyExchange 과정은 생략된다.
+
+       인증서 내부에 서버의 공개키가 있다면 클라이언트가 CA의 공개키를 통해 인증서를 복호화한 후 서버의 공개키를 확보할 수 있다. 그리고 서버가 작업을 마쳤다고 **ServerHelloDone**을 전달한다.
+
+4. ***Client Key Exchange(데이터를 암호화 할 대칭키 전달)***: 클라이언트는 데이터 암호화에 사용할 대칭키를 생성한 후 SSL 인증서 내부에서 추출한 서버의 공개키를 이용하여 암호화한 후 서버에 전달한다. 전달된 대칭키가 SSL Handshaking의 목적이자, 추후 데이터를 암호화할 대칭키이다.
+5. ***Client/Server Hello Done(정보 전달 완료)***
+6. ***ChangeCipherSpec/ Finished*** : ChangeCiperSpec 패킷은 클라이언트와 서버 모두가 서로에게 보내는 패킷으로 교환할 정보를 모두 교환한 뒤 통신할 준비가 다 되었음을 알리는 패킷이다. 그 후 finish 패킷을 보내어 SSL handshake를 종료한다.
+
+### Reference
+- [2022-ConquerCS/TLS, SSL HandShake.md at main · woowacourse-study/2022-ConquerCS](https://github.com/woowacourse-study/2022-ConquerCS/blob/main/2%EC%A3%BC%EC%B0%A8/%EB%A0%89%EC%8A%A4/TLS%2C%20SSL%20HandShake.md)
 
 <hr>
 </details>
@@ -489,7 +590,8 @@ http 상태 코드는 클라이언트가 보낸 요청의 처리 상태를 응�
 
 대표적인 예시를 들면 `PATCH`요청을 보낼 때, 나이를 30으로 업데이트 하는 요청을 body에 `age:30`과 같이 명시적으로 보낼 경우 멱등성을 보장한다. 하지만 나이를 한 살 올리라는 의미로 `value:1` 의 값을 body에 담아 보낼 경우 요청을 보낼 때마다 결과가 달라 멱등하지 않게 된다.
 
-[[ RESTful API] PUT과 PATCH의 차이 - 멱동성을 보장하는 PUT, 멱등성을 보장하지 않는 PATCH](https://oen-blog.tistory.com/211)
+### Reference
+- [[ RESTful API] PUT과 PATCH의 차이 - 멱동성을 보장하는 PUT, 멱등성을 보장하지 않는 PATCH](https://oen-blog.tistory.com/211)
 
 <hr>
 </details>
@@ -516,12 +618,13 @@ http 상태 코드는 클라이언트가 보낸 요청의 처리 상태를 응�
 그림과 같이 TCP Keepalive는 일정 시간이 지나면 연결된 세션이 살아있는지 확인하기 위해 아주 작은 양의 패킷을 하나 보낸다. 패킷은 연결을 유지하기 원하는 쪽에서 보낸다. 패킷을 주고 받은 다음에 타이머는 원점으로 돌아가고 카운트를 진행한다.
 최초로 세션이 연결된 다음 `tcp_keepalive_time` 동안 기다린다. 그리고 확인 패킷을 보내게 된다. 확인 패킷에 대한 응답이 오지 않으면 `tcp_keepalive_intv` 간격으로 `tcp_keepalive_probes` 만큼 패킷을 더 보낸다. `tcp_keepalive_probes`의 마지막 패킷에 대해서 응답이 오지 않으면 연결을 끊는다.
 TCP Keepalive는 연결된 세션의 재활용 측면에서만 아니라 좀비 커넥션의 삭제에도 도움을 준다.
-TCP 연결을 끊으려면 FIN 패킷이 필요하다. 하지만 다양한 이유로 FIN 패킷을 받을 수 없는 상황이 된다면 FIN 을 전달할 수 없어 계속 연결된 것처럼 남아있게 된다. TCP Keepalive 옵션을 사용한다면 일정시간이 확인 패킷 을 보내는 로직을 통해 일정시간 동안 응답이 없다면 연결을 종료하기 때문에 좀비 커넥션을 방지할 수 있다.
+TCP 연결을 끊으려면 FIN 패킷이 필요하다. 하지만 다양한 이유로 FIN 패킷을 받을 수 없는 상황이 된다면 FIN 을 전달할 수 없어 계속 연결된 것처럼 남아있게 된다. TCP Keepalive 옵션을 사용한다면 일정시간동안 확인 패킷을 보내는 로직을 통해 일정시간 동안 응답이 없다면 연결을 종료하기 때문에 좀비 커넥션을 방지할 수 있다.
 
 > TCP Keep-alive는 두 종단 간의 연결을 유지하기 위함이지만, HTTP keep-alive는 최대 얼마동안 연결을 유지할지 정하는 목적을 갖고 있다.
 >
 
-[Keepalive 정리](https://devidea.tistory.com/60)
+### Reference
+- [Keepalive 정리](https://devidea.tistory.com/60)
 
 <hr>
 </details>
@@ -636,7 +739,8 @@ MAC 주소는 컴퓨터간 데이터를 전송하기 위해 있는 컴퓨터의 
 
 PC간 통신을 할 때는 IP주소만을 알고 통신을 하며 거쳐가는 기기들의 MAC주소는 알지 못한다. 우리가 MAC주소를 전달하지 않아도 네트워크단에서 IP주소로 MAC주소를 알아오는 프로토콜이 존재하는데 이를 `ARP`라고 한다.
 
-[맥 어드레스란 무엇인가? IP주소와 맥주소(MAC address) 차이, 맥 주소 확인하는 법 - 네트워크 기초](https://jhnyang.tistory.com/404)
+### Reference
+- [맥 어드레스란 무엇인가? IP주소와 맥주소(MAC address) 차이, 맥 주소 확인하는 법 - 네트워크 기초](https://jhnyang.tistory.com/404)
 
 <hr>
 </details>
@@ -666,37 +770,81 @@ ARP(Address Resolution Protocol)는 IP 주소를 MAC주소와 매칭 시키기 �
 
 매핑시키는 과정에서는 IP주소와 MAC주소를 일대일 매칭시킨 정보를 정리해둔 ARP Table을 이용한다.
 
-[ARP 쉽게 이해하기](https://aws-hyoh.tistory.com/entry/ARP-%EC%89%BD%EA%B2%8C-%EC%9D%B4%ED%95%B4%ED%95%98%EA%B8%B0)
+#### ARP 테이블을 만드는 과정
+
+![Untitled](img/network/arp.png)
+
+PC0이 PC2로 데이터를 전송하려한다면 아래와 같은 순서로 동작한다.
+
+1. PC0은 Routing Table을 보고 PC2가 같은 LAN에 속한다는 것을 알아 PC2의 MAC 주소를 알아내기 위해 **ARP Request를 Broadcast**한다.
+    - ARP Request는 IP주소에 매칭되는 MAC 주소는 어디인가요?라는 요청이라 보면 된다.
+2. Broadcast여서 ARP Request는 같은 LAN에 위치한 모든 노드들이 받게 되고, 타겟 노드인 PC2는 ARP Response를 보내게 된다.
+    - PC2가 아닌 노드들은 무시를 한다,
+3. PC0은 PC2가 보낸 ARP Response를 받고 ARP Table에 PC2의 IP와 MAC 주소를 적는다.
+4. PC2에 데이터를 보내야하는 요청이 들어오면 ARP Table에 기재된 MAC 주소를 이용해 데이터를 보낸다.
+
+### Reference
+- [ARP 쉽게 이해하기](https://aws-hyoh.tistory.com/entry/ARP-%EC%89%BD%EA%B2%8C-%EC%9D%B4%ED%95%B4%ED%95%98%EA%B8%B0)
 
 <hr>
 </details>
 
 
 <details>
-<summary>DNS에 대해 설명해주세요.</summary>
+<summary>DNS에 대해 설명해주세요</summary>
 
 <hr>
 
-웹사이트는 외우기 어려운 IP주소 대신 naver.com과 같은 도메인 네임을 사용한다. 도메인 이름을 사용했을 때 입력한 도메인을 실제 네트워크상에서 사용하는 IP 주소로 바꾸고 해당 IP 주소로 접속하는 과정이 필요하다.이러한 과정, 전체 시스템을 **DNS(Domain Name System)**라고 한다.
+웹사이트는 외우기 어려운 IP주소 대신 naver.com과 같은 도메인 네임을 사용한다. 도메인 이름을 사용했을 때 입력한 도메인을 실제 네트워크상에서 사용하는 IP 주소로 바꾸고 해당 IP 주소로 접속하는 과정이 필요하다.이러한 과정, 전체 시스템을 **DNS(Domain Name System)**오 라고 한다.
 
-DNS는 이처럼 상위 기관과 하위 기관과 같은 ‘계층 구조’를 가지는 분산 데이터베이스 구조를 가진다.
+DNS는 Root DNS Server, TLD(Top-Level Domain), Authoritative DNS Server로 계층구조를 이루고 있다.
 
-![Untitled](img/network/img_4.png)
+- **Root DNS Server**: ICAANN이 직접 관리하는 서버로, TLD DNS 서버들의 IP 주소를 보관하고 안내하는 역할을 한다.
+- **TLD(Top-Level Domain)**: 도메인 등록기관(Registry)이 관리하는 서버로 Authoritive DNS 서버의 주소를 갖고 안내하는 역할을 한다. 각각의 TLD 서버들은 `.com`, `.kr`, `.net`등에 매칭되는 주소들을 갖고 있다.
+    - 예를 들어보면 naver.com으로 요청이 들어왔다면 Root DNS에서 `.com`의 Authoritive DNS서버 주소를 가진 TLD 서버로 넘어온 후, TLD에서는 naver.com에 해당하는 Authoritive DNS 서버 주소를 반환한다.
+- **Authoritive DNS Server**: 실제 도메인과 IP 주소의 정보를 갖고 있는 서버이다. 일반적으로 가비아와 같은 호스팅 업체의 **네임서버**가 해당한다.
+- **Recursive DNS Server**: 인터넷 사용자가 가장 먼저 접근하는 DNS서버로, `<도메인, IP>`의 쌍을 저장하는 캐시 서버이다. SK/KT/LG와 같은 ISP(통신사) DNS 서버 등이 있다.
 
-### DNS 동작 과정 전체 예시
+### **DNS 동작 과정 전체 예시**
 
-1. 웹 브라우저에 www.hanamon.kr을 입력한다.
-2. 웹 브라우저는 이전에 방문한적 있는지 찾는다.
-  - 브라우저 캐시 확인
-  - OS 캐시 확인
-  - 라우터 캐시 확인
-  - ISP 캐시 확인 (Recursive DNS Server)
-3. ISP에서 DNS Iterative하게 쿼리를 날린다.
-4. ISP는 Authoritative DNS 서버에서 최종적으로 IP 주소를 응답받는다.
-5. ISP는 해당 IP 주소를 캐시한다.
-6. 웹 브라우저에게 응답한다.
+![Untitled](img/network/dns.png)
 
-[DNS란? (도메인 네임 시스템 개념부터 작동 방식까지) - 하나몬](https://hanamon.kr/dns%EB%9E%80-%EB%8F%84%EB%A9%94%EC%9D%B8-%EB%84%A4%EC%9E%84-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EA%B0%9C%EB%85%90%EB%B6%80%ED%84%B0-%EC%9E%91%EB%8F%99-%EB%B0%A9%EC%8B%9D%EA%B9%8C%EC%A7%80/)
+### Reference
+- [DNS란 뭐고, 네임서버란 뭔지 개념정리 | 살살살림](https://gentlysallim.com/dns란-뭐고-네임서버란-뭔지-개념정리/)
+- [DNS란? (도메인 네임 시스템 개념부터 작동 방식까지) - 하나몬](https://hanamon.kr/dns%EB%9E%80-%EB%8F%84%EB%A9%94%EC%9D%B8-%EB%84%A4%EC%9E%84-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EA%B0%9C%EB%85%90%EB%B6%80%ED%84%B0-%EC%9E%91%EB%8F%99-%EB%B0%A9%EC%8B%9D%EA%B9%8C%EC%A7%80/)
+
+<hr>
+</details>
+
+
+<details>
+<summary>DHCP에 대해 설명해주세요</summary>
+
+<hr>
+
+- DHCP는 ‘Dynamic Host Configuration Protocol(동적 호스트 구성 프로토콜)’의 약자로, 호스트의 IP 주소 및 각종 TCP/IP 프로토콜의 기본 설정을 네트워크에 연결된 장치(클라이언트)에 자동으로 제공해주는 프로토콜을이다. 즉, **네트워크 관리자가 수동으로 할당해야할 IP를 자동으로 할당해주는 역할을 한다.**
+- DHCP는 IP주소를 DHCP 서버가 중앙집중식으로 관리하는 클라이언트/서버 모델을 사용한다.
+- DHCP 지원 클라이언트는 네트워크 부팅 과정에서 DHCP서버에 IP 주소를 요청하면 주소를 얻을 수 있다.
+
+> 대부분의 가정용 네트워크에서는 라우터가 DHCP서버의 역할을 한다.
+>
+
+장점
+
+- **신뢰성 높은 DHCP IP 주소 구성**: DHCP는 동일한 IP 주소를 이용하는 두 명의 사용자 사이의 충돌을 방지하도록 도와준다. 이러한 충돌이 발생하는 경우 두 명의 사용자 모두 인터넷에 연결하지 못하게 된다. DHCP는 자동으로 이러한 충돌을 방지할 수 있다는 장점이 있다.
+- **높은 이동성**: DHCP는 높은 이동성을 보장하며 사용자는 네트워크 범위 내에서 어디서든지 모바일 장치를 이용할 수 있다.
+- **효율적인 네트워크 관리**: DHCP를 사용하면 별도의 IP 할당 서버가 필요하지 않아 네트워크 관리 효율성이 개선된다.
+- **IP 체계의 유연성**: DHCP를 이용하면 최종 사용자에게 지장을 주지 않으면서 IP 주소 체계를 손쉽게 변경할 수 있다.
+
+단점
+
+- DHCP는 아무런 인증 과정을 거치지 않기 때문에 사이버 공격에 취약하다.
+- DHCP 서버에 의존되는 네트워크가 만들어지게 된다.
+    - DHCP서버가 죽으면 IP할당이 제대로 이루어지지 않는다.
+
+### Reference
+- [DHCP의 정의와 DHCP를 이용해야 하는 이유](https://nordvpn.com/ko/blog/what-is-dhcp/)
+- [DHCP란?](https://jwprogramming.tistory.com/35)
 
 <hr>
 </details>
