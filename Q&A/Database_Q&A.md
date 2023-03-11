@@ -2,30 +2,33 @@
 <details>
 <summary>SQL이란 무엇일까요?</summary>
 
-<br>
+<hr>
 
 SQL(Structured Query Language)란 관계형 데이터베이스 관리 시스템의 데이터를 관리하기 위해 설계된 특수 목적의 프로그래밍 언어이며 관계형 데이터베이스 관리 시스템에서 자료의 검색, 관리, 데이터베이스 스키마 생성과 수정, 데이터베이스 객체 접근 조정 관리를 위해 고안되었다.
 
+<hr>
 </details>
 
 
 <details>
 <summary>트랜잭션이란?</summary>
 
-<br>
+<hr>
 
 - 트렌잭션이란 데이터베이스의 상태를 변화시키기 위해 수행하는 작업의 단위 또는 한꺼번에 모두 수행되어야 할 일련의 연산들을 뜻한다.
 - 트랜잭션은 데이터의 정합성을 보장하기 위해 고안되었으며 데이터베이스 시스템에서 병행제어 및 회복 작업을 할 시 처리되는 작업의 논리적인 단위가 된다.
 
-[트랜잭션이란?](https://seongwon.dev/Database/20221001-트랜잭션이란/)
+### 📚 Reference
+- [트랜잭션이란?](https://seongwon.dev/Database/20221001-트랜잭션이란/)
 
+<hr>
 </details>
 
 
 <details>
 <summary>트랜잭션의 특징인 ACID에 대해 설명해주세요 </summary>
 
-<br>
+<hr>
 
 - Atimicity(원자성)
   - 트랜잭션의 연산은 DB에 모두 반영되거나 아예 반영되지 않아야 한다,
@@ -37,15 +40,17 @@ SQL(Structured Query Language)란 관계형 데이터베이스 관리 시스템�
 - Durability(지속성, 영속성)
   - 성공적으로 수행을 마친 트랜잭션의 결과는 시스템이 고장나도 영구적으로 반영되어야 한다.
 
-[트랜잭션이란?](https://seongwon.dev/Database/20221001-트랜잭션이란/#트랜젝션의-특징-acid)
+### 📚 Reference
+- [트랜잭션이란?](https://seongwon.dev/Database/20221001-트랜잭션이란/#트랜젝션의-특징-acid)
 
+<hr>
 </details>
 
 
 <details>
 <summary>다수의 트랜잭션이 하나의 자원을 접근할 때 발생할 수 있는 문제들은 무엇이 있을까요?</summary>
 
-<br>
+<hr>
 
 - Dirty Read
   - Uncommitted 결과를 다른 트랜젝션에서 확인하는 현상을 말한다.
@@ -54,17 +59,18 @@ SQL(Structured Query Language)란 관계형 데이터베이스 관리 시스템�
 - Phantom Read
   - 한 트랜잭션 안에서 일정 범위의 레코드를 두 번 이상 읽었을 때, 첫번째 쿼리에서 없던 데이터가 두번째 쿼리에서 나타나는 현상이다.
 
-[트랜잭션이란?](https://seongwon.dev/Database/20221001-트랜잭션이란/#다수의-트랜젝션이-하나의-자원을-경쟁할-때의-문제들)
+### 📚 Reference
+- [트랜잭션이란?](https://seongwon.dev/Database/20221001-트랜잭션이란/#다수의-트랜젝션이-하나의-자원을-경쟁할-때의-문제들)
+- [트랜잭션의 격리수준(Isolation level)이란?](https://seongwon.dev/Database/20221022-트랜잭션-격리수준이란/)
 
-[트랜잭션의 격리수준(Isolation level)이란?](https://seongwon.dev/Database/20221022-트랜잭션-격리수준이란/)
-
+<hr>
 </details>
 
 
 <details>
 <summary>트랜잭션의 격리 레벨에 대해 설명해주세요</summary>
 
-<br>
+<hr>
 
 트랜잭션 격리수준이란 여러 트랜잭션이 동시에 처리될 떄 특정 트랜잭션이 다른 트랜잭션에서 변경하거나 조회하는 데이터를 볼 수 있게 허용할지 말지를 결정하는 것입니다. 격리 수준을 어떻게 설정하느에 따라 데이터 부정합 문제와 성능에 영향을 줄 수 있다.
 
@@ -93,15 +99,17 @@ SQL(Structured Query Language)란 관계형 데이터베이스 관리 시스템�
 - 모든 동작이 직렬화하게 작동하여 완벽한 읽기 일관성 모드를 제공한다.
 - 데이터에 접근하는 것 만으로도 다른 트랜잭션은 해당 데이터에 접근할 수 없기에 REPEATABLE READ에서 발생하는 Phantom Read는 발생하지 않는다.
 
-[트랜잭션의 격리수준(Isolation level)이란?](https://seongwon.dev/Database/20221022-트랜잭션-격리수준이란/)
+### 📚 Reference
+- [트랜잭션의 격리수준(Isolation level)이란?](https://seongwon.dev/Database/20221022-트랜잭션-격리수준이란/)
 
+<hr>
 </details>
 
 
 <details>
 <summary>DDL, DML, DCL 은 무엇일까요?</summary>
 
-<br>
+<hr>
 
 **DDL(Data Definition Language)**
 
@@ -121,13 +129,14 @@ SQL(Structured Query Language)란 관계형 데이터베이스 관리 시스템�
 - 데이터베이스에 접근하거나 객체에 권한을 주는 등의 역할을 하는 언어이다.
 - GRANT, REVOKE, COMMIT, ROLLBACK
 
+<hr>
 </details>
 
 
 <details>
 <summary>Key에 대해 설명해주세요</summary>
 
-<br>
+<hr>
 
 **후보키 (candidate key)**
 
@@ -168,25 +177,27 @@ SQL(Structured Query Language)란 관계형 데이터베이스 관리 시스템�
 - 참조되는 릴레이션의 기본키와 대응되어 릴레이션 간에 참조 관계를 표현하는데 중요한 도구로 사용된다.
 - **참조 무결성의 조건으로 외래키로 참조 테이블의 기본키에 없는 값은 입력할 수 없다.**
 
+<hr>
 </details>
 
 
 <details>
 <summary>외래키 값은 NULL이 들어올 수 있나요?</summary>
 
-<br>
+<hr>
 
 Yes. 외래키는 Null이 허용된다.
 
 하지만 참조 무결성을 위해 null을 하지 않는 것이 좋다.
 
+<hr>
 </details>
 
 
 <details>
 <summary>View란 무엇일까요?</summary>
 
-<br>
+<hr>
 
 데이터베이스에서 뷰는 사용자에게 접근이 허용된 자료만을 보여주기 위해 한개 이상의 테이블을 조인하여 만든 **가상 테이블**이다. 뷰는 저장 장치에 물리적으로 존재하지 않지만 사용자에게는 실제로 존재하는 것처럼 간주된다.
 
@@ -214,17 +225,18 @@ Yes. 외래키는 Null이 허용된다.
 - Distinct를 포함하는 경우에 DML 명령 사용 불가
 - 그룹 함수나 Group By 절을 포함한 경우 DML 명령 사용 불가
 
-[SQL 단순 VIEW 수정 & 삭제](https://pathas.tistory.com/73)
+### 📚 Reference
+- [SQL 단순 VIEW 수정 & 삭제](https://pathas.tistory.com/73)
+- [[DB기초] 뷰(View)란 무엇인가? + 간단한 예제](https://coding-factory.tistory.com/224)
 
-[[DB기초] 뷰(View)란 무엇인가? + 간단한 예제](https://coding-factory.tistory.com/224)
-
+<hr>
 </details>
 
 
 <details>
 <summary>조인(Join)은 무엇이며 어떤 종류들이 있을까요?</summary>
 
-<br>
+<hr>
 
 조인이란 두 개 이상의 테이블이나 데이터베이스를 연결하여 데이터를 검색하는 방법이다. 테이블을 연결하려면 1개 이상의 속성을 공유하고 있어야하여 이를 통해 데이터 검색을 한다.
 
@@ -299,13 +311,14 @@ Yes. 외래키는 Null이 허용된다.
 > [DB JOIN 정리(INNER/LEFT/RIGHT/OUTER)](https://pearlluck.tistory.com/46)
 >
 
+<hr>
 </details>
 
 
 <details>
 <summary>데이터베이스 이상(Anomaly)현상이란?</summary>
 
-<br>
+<hr>
 
 좋은 관계형데이터베이스를 설계하는 목적 중 하나가 정보의 이상 현상(Anomaly)이 생기지 않도록 고려해 설계하는 것이다. 이상 현상은 테이블을 설계할 때 잘못 설계하여 데이터를 삽입, 삭제, 수정할 때 논리적으로 생기는 오류를 말한다.
 
@@ -321,15 +334,17 @@ Yes. 외래키는 Null이 허용된다.
 
 - 어떤 정보를 삭제하면, 의도하지 않은 다른 정보까지 삭제되어버리는 현상이다.
 
-[관계형 데이터베이스(RDBMS)의 이상(anomaly) 현상](https://m.blog.naver.com/gluestuck/221711573210)
+### 📚 Reference
+- [관계형 데이터베이스(RDBMS)의 이상(anomaly) 현상](https://m.blog.naver.com/gluestuck/221711573210)
 
+<hr>
 </details>
 
 
 <details>
 <summary>정규화란 무엇일까요?</summary>
 
-<br>
+<hr>
 
 - 정규화란 이상현상(Anomaly)이 있는 릴레이션을 분해하여 이상현상을 없애는 과정이다.
 - 데이터의 중복성을 최소화하고 일관성 등을 보장하여 데이터베이스의 품질을 보장하고 성능의 향상을 위해 수행한다.
@@ -403,17 +418,18 @@ Yes. 외래키는 Null이 허용된다.
 
 모든 **조인 종속이 없는**되는 정규형이다.
 
-[https://code-lab1.tistory.com/48](https://code-lab1.tistory.com/48)
+### 📚 Reference
+- [https://code-lab1.tistory.com/48](https://code-lab1.tistory.com/48)
+- [[DB] 제 4정규형과 제 5정규형, 4NF와 5NF](https://code-lab1.tistory.com/270)
 
-[[DB] 제 4정규형과 제 5정규형, 4NF와 5NF](https://code-lab1.tistory.com/270)
-
+<hr>
 </details>
 
 
 <details>
 <summary>RDBMS와 NoSQL의 차이점은 무엇일까요?</summary>
 
-<br>
+<hr>
 
 ### RDBMS
 
@@ -474,14 +490,16 @@ Yes. 외래키는 Null이 허용된다.
 > 정확한 데이터 구조를 알 수 없거나 변경/확장이 될 수 있는 경우, 읽기는 자주하지만 데이터 변경은 자주 없는 경우, DB를 수평적 확장해야하는 경우에는 NoSQL을 사용을 고려하면 좋다.
 >
 
-[[Database] RDBMS와 NoSQL의 차이점](https://khj93.tistory.com/entry/Database-RDBMS와-NOSQL-차이점)
+### 📚 Reference
+- [[Database] RDBMS와 NoSQL의 차이점](https://khj93.tistory.com/entry/Database-RDBMS와-NOSQL-차이점)
 
+<hr>
 </details>
 
 <details>
 <summary>Full table scan이란?</summary>
 
-<br>
+<hr>
 
 - 데이터를 탐색하기 위해 모든 테이블의 데이터를 순차적으로 탐색하는 방법이다.
 - 데이터베이스는 아래의 상황에서 Full table scan으로 탐색하게 된다.
@@ -490,13 +508,14 @@ Yes. 외래키는 Null이 허용된다.
   - 크기가 작은 테이블에 엑세스하는 경우
 - Full table scan의 경우 모든 데이터를 순차적으로 탐색하기때문에 데이터가 많을 경우 조죄할 때, 많은 비용이 든다. 이를 보완하기 위해 Index를 설정하여 조회 성능을 향상시킬 수 있다.
 
+<hr>
 </details>
 
 
 <details>
 <summary>카디널리티(Cardinality)란?</summary>
 
-<br>
+<hr>
 
 - 모든 인덱스 키 값 중 유니크한 값의 수를 의미한다.
 - 인덱스에서 Selectivity(선택성)과 Cartinality(기수성)은 같은 의미로 사용된다.
@@ -510,12 +529,13 @@ Yes. 외래키는 Null이 허용된다.
   > 기수성이 좋지 않다해도 정렬이나 Grouping같은 작업을 위해 인덱스를 만드는 것이 훨씬 더 나은 경우도 많다. → 인덱스가 항상 검색에만 사용되는 것이 아니므로 여러 용도를 고려해 설계할 필요가 있다.
 
 
+<hr>
 </details>
 
 <details>
 <summary>인덱스란 무엇일까요?</summary>
 
-<br>
+<hr>
 
 - 인덱스란 책의 목차와 같은 개념으로, 추가적인 쓰기 작업과 저장 공간을 활용하여 데이터베이스 테이블의 검색 속도를 향상시키기 위한 자료구조이다.
 - Index는 항상 정렬된 상태로 보관을 하기에 저장(Insert, Update, Delete) 요청이 오면 Index의 정렬이 다시 한번 진행되기에 성능적으로 손해를 볼 수 있다. 하지만 조회(Select)의 경우 성능 향상을 느낄 수 있다.
@@ -578,13 +598,14 @@ DBMS는 Index를 항상 최신의 상태로 유지해야지 원하는 값을 빠
   - Index에서 Data가 delete 되는 경우 : Data가 지워지지 않고, 사용 안 됨 표시만 해둔다.
   - 그래서 Table의 Data 수와 Index의 Data 수가 다를 수 있다.
 
+<hr>
 </details>
 
 
 <details>
 <summary>B-Tree란?</summary>
 
-<br>
+<hr>
 
 - B-Tree는 가장 일반적으로 먼저 도입된 알고리즘이다.
 - B-Tree에서 B는 Binary가 아닌 Balanced를 의미한다.
@@ -598,12 +619,13 @@ DBMS는 Index를 항상 최신의 상태로 유지해야지 원하는 값을 빠
 - B-Tree는 루트 노드 아래에 하위 노드(브랜치, 리프 노드)들이 붙어있는 형태이다.
 - 데이터베이스에서는 클러스터링 인덱스인지 논-클러스터링 인덱스인지에 따라 리프 노드에 실제 데이터 또는 주소를 저장하고 있다.
 
+<hr>
 </details>
 
 <details>
 <summary>클러스터링 인덱스와 논-클러스터링 인덱스란 무엇일까요?</summary>
 
-<br>
+<hr>
 
 > B-Tree의 질문을 먼저 보는 것을 추천드립니다.
 >
@@ -655,8 +677,10 @@ ON member(name);
 
 MySQL InnoDB의 경우 기본적으로 클러스터링 테이블을 생성하여 값을 저장한다. 그렇기에 InnoDB를 사용할 경우 인덱스 B-Tree의 리프 노드가 가르키는 데이터가 실제 데이터의 주소값이 아닌 데이터를 저장하는 클러스터 인덱스의 키(프라이머리 키)가 된다. 즉, 실제 데이터를 읽기 위해서는 Index의 B-Tree를 탐색 후, 클러스터 내의 B-Tree를 다시 한번 탐색해야 한다. 이와 같이 실제 데이터의 주소가 아닌 클러스터링 인덱스로 지정된 PK값을 저장하는 이유는 데이터가 추가되며 페이지 분할이 발생할 경우, 실제 위치한 주소가 변경되는 데이터들이 발생하게 되는데, 그럴 때마다 논 클러스터링 인덱스 페이지의 값을 변경해야하는 상황이 생기게 되어 PK값을 저장하고 있다.
 
-[[10분 테코톡] 라라, 제로의 데이터베이스 인덱스](https://www.youtube.com/watch?v=edpYzFgHbqs)
+### 📚 Reference
+- [[10분 테코톡] 라라, 제로의 데이터베이스 인덱스](https://www.youtube.com/watch?v=edpYzFgHbqs)
 
+<hr>
 </details>
 
 
@@ -664,7 +688,7 @@ MySQL InnoDB의 경우 기본적으로 클러스터링 테이블을 생성하여
 <details>
 <summary>MySQL InnoDB의 Undo 영역과 Redo 영역에 대해 설명해 주세요.</summary>
 
-<br>
+<hr>
 
 ### UNDO LOG
 
@@ -705,14 +729,16 @@ MySQL InnoDB의 경우 기본적으로 클러스터링 테이블을 생성하여
 
 ![Untitled](img/database/img_4.png)
 
-[Mysql Redo / Undo Log](https://velog.io/@pk3669/Mysql-Redo-Undo-Log)
+### 📚 Reference
+- [Mysql Redo / Undo Log](https://velog.io/@pk3669/Mysql-Redo-Undo-Log)
 
+<hr>
 </details>
 
 <details>
 <summary>MySQL의 Insert Buffer란?</summary>
 
-<br>
+<hr>
 
 레코드가 Insert, Update되었을 때, 데이터의 변경 뿐만 아니라 인덱스를 업데이트 하는 작업도 필요하다.
 
@@ -720,22 +746,24 @@ InnoDB는 변경해야 할 인덱스 페이지가 Buffer Pool에 있으면 바�
 
 > 즉, Index에 대한 업데이트 작업은 Insert Buffer에 지연시키고 사용자에게는 작업이 완료되었다고 먼저 통보를 한다.
 
+<hr>
 </details>
 
 <details>
 <summary>MySQL InnoDB의 MVCC에 대해 설명해주세요</summary>
 
-<br>
+<hr>
 
 - MVCC(Multi Version Concurrency Control)는 하나의 레코드에 대해 2개의 버전이 유지되고, 필요에 따라 보여지는 데이터가 다른 구조를 의미한다.
 - 트랜잭션 격리수준에서 READ_UNCOMMITTED를 제외한 상위 레벨의 격리수준의 경우 커밋되지 않은 데이터는 다른 트랜잭션에서 볼 수 없기에 InnoDB Buffer pool이나 Disk에 있는 내용 대신 Undo Log에 기록해준 변경되기 이전의 데이터를 반환해주는데 이러한 과정을 MVCC라고 한다.
 
+<hr>
 </details>
 
 <details>
 <summary>MySQL 락에 대해 설명해주세요</summary>
 
-<br>
+<hr>
 
 > InnoDB 스토리지 엔진의 락
 >
@@ -752,27 +780,30 @@ InnoDB는 변경해야 할 인덱스 페이지가 Buffer Pool에 있으면 바�
 
 - 레코드 락과 갭 락을 합쳐놓은 것을 의미한다.
 
+<hr>
 </details>
 
 <details>
 <summary>MySQL에서 기본키를 설정하지 않고 테이블을 만들면 어떻게 될까요?</summary>
 
-<br>
+<hr>
 
 - 기본값인 innoDB엔진은 데이터를 저장하고 indexing하기 위해 PK를 요구한다. 그래서 PK를 지정하지 않을 경우 auto_increment 속성의 사용자에게 노출되지 않는 hidden PK가 생성된다.
 - 하지만 해당 속성의 경우 데이터 관리를 하는데 어려움이 있어 명시적으로 설정하는 것이 좋다.
   - 기본키와 Unique제약조건이 없는 테이블을 만들경우, 데이터를 사용할 때 자동으로 만들어지는 PK를 사용하지 않게 되고 secondary index도 없는 테이블이 만들어진다. 그 결과 조회, 삭제와 같은 연산을 수행할 때 사용할 적절한 Index가 없어 성능 저하가 발생한다.
   - 기본키가 없을 경우 테이블간의 관계 모델링을 하는 것이 일반적으로 불가능하다.
 
-[Table 작성 시 PK를 무조건 사용해야 하는 이유 - 기술 블로그](https://hodongman.github.io/2019/01/14/Database-PK를-사용해야-하는-이유.html)
+### 📚 Reference
+- [Table 작성 시 PK를 무조건 사용해야 하는 이유 - 기술 블로그](https://hodongman.github.io/2019/01/14/Database-PK를-사용해야-하는-이유.html)
 
+<hr>
 </details>
 
 ### DBCP, HikariCP
 <details>
 <summary>DB Connection Pool은 무엇이며 왜 필요할까요?</summary>
 
-<br>
+<hr>
 
 애플리케이션이 DB와의 통신을 하기 위해 매번 새로운 커넥션을 맺는 것은 네트워크 관점에서도 데이터베이스 관점에서도 매우 비효율적이다. 이를 해결하기 위해 데이터베이스 커넥션 풀이 만들어졌다.
 
@@ -784,24 +815,27 @@ DB 커넥션 풀은 DB 커넥션을 여러개 생성하여 풀(Pool)에 저장�
 - DB Connection 수를 제한할 수 있어서 과도한 접속으로 인한 서버의 자원 고갈 방지가 가능하다.
 - DB 접속 모듈을 공통화하여 DB 서버의 환경이 바뀔 경우 쉬운 유지보수가 가능하다.
 
-[DB Connection Pool (DBCP) (feat.HikariCP)](https://seongwon.dev/Database/20221002-DB_Connection_Pool/)
+### 📚 Reference
+- [DB Connection Pool (DBCP) (feat.HikariCP)](https://seongwon.dev/Database/20221002-DB_Connection_Pool/)
 
+<hr>
 </details>
 
 <details>
 <summary>HikariCP란 무엇일까요?</summary>
 
-<br>
+<hr>
 
 - HikariCP란 **Spring에서 default로 사용하고 있는 JDBC Connection Pool이다.**
 - HikariCP란 Brett Wooldridge가 2012년에 개발한 JDBC Connection Pool이다. 이는 zero-overhead라고 홍보를 하고 있을 정도로 매우 가볍고, 빠르고 안정적이다.
 
+<hr>
 </details>
 
 <details>
 <summary>HikariCP의 동작 원리에 대해 설명해주세요</summary>
 
-<br>
+<hr>
 
 > DBCP는 Thread가 Connection을 요청하면 Connection Pool에서 각자의 Connection 반환 방식에 따라서 현재 사용중이지 않은 Connection을 반환한다.
 >
@@ -815,4 +849,5 @@ HikariCP의 경우 이전에 사용하였던 Connection이 있으면 해당 Conn
 >
 > [DB Connection Pool (DBCP) (feat.HikariCP)](https://seongwon.dev/Database/20221002-DB_Connection_Pool/#dbcp의-동작-원리-hikaricp)
 
+<hr>
 </details>
