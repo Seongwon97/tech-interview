@@ -10,7 +10,7 @@
 - TCP는 연결의 체증을 제어하기 위해 흐름제어(Flow Control)과 혼잡제어(Congestion Control)을 진행한다. 반대로 UDP는 수행하지 않는다.
 - 속도 측면에서는 비연결형인 UDP가 더 빨라서 스트리밍과 같이 연속성이 중요한 서비스에 사용된다. 반면에 TCP는 속도가 느린대신 연결을 맺고 통신을 하기에 신뢰성이 중요한 서비스에 이용한다.
 
-![](img/network/img.png)
+![](img/network/tcp_udp.png)
 
 <hr>
 </details>
@@ -279,7 +279,7 @@ OSI 7 계층은 네트워크 프로토콜이 통신하는 구조를 7개의 �
 - 실용성에 중점을 두고 개발되었다.
 - OSI 7계층과 다르게 4계층으로 구분되어 있다.
 
-![](img/network/img_1.png)
+![](img/network/tcp_ip_4layer.png)
 
 <hr>
 </details>
@@ -537,7 +537,7 @@ HTTP 메소드는 `클라이언트가 웹 서버에게 사용자 요청의 목�
 - `CONNECT`: 대상 자원으로 식별되는 서버에 대한 터널을 설정
 - `TRACE`: 대상 리소스에 대한 경로를 따라 메시지 루프백 테스트를 수행
 
-![](img/network/img_2.png)
+![](img/network/http_method.png)
 
 <hr>
 </details>
@@ -613,7 +613,7 @@ http 상태 코드는 클라이언트가 보낸 요청의 처리 상태를 응�
 
 3-way handshake를 통해 얻은 세션을 요청에 대한 응답을 하더라도 없애지 않고 계속 유지해주는 기능이다.
 
-![Untitled](img/network/img_3.png)
+![Untitled](img/network/tcp_keepAlive.png)
 
 그림과 같이 TCP Keepalive는 일정 시간이 지나면 연결된 세션이 살아있는지 확인하기 위해 아주 작은 양의 패킷을 하나 보낸다. 패킷은 연결을 유지하기 원하는 쪽에서 보낸다. 패킷을 주고 받은 다음에 타이머는 원점으로 돌아가고 카운트를 진행한다.
 최초로 세션이 연결된 다음 `tcp_keepalive_time` 동안 기다린다. 그리고 확인 패킷을 보내게 된다. 확인 패킷에 대한 응답이 오지 않으면 `tcp_keepalive_intv` 간격으로 `tcp_keepalive_probes` 만큼 패킷을 더 보낸다. `tcp_keepalive_probes`의 마지막 패킷에 대해서 응답이 오지 않으면 연결을 끊는다.
@@ -795,7 +795,7 @@ PC0이 PC2로 데이터를 전송하려한다면 아래와 같은 순서로 동�
 
 <hr>
 
-웹사이트는 외우기 어려운 IP주소 대신 naver.com과 같은 도메인 네임을 사용한다. 도메인 이름을 사용했을 때 입력한 도메인을 실제 네트워크상에서 사용하는 IP 주소로 바꾸고 해당 IP 주소로 접속하는 과정이 필요하다.이러한 과정, 전체 시스템을 **DNS(Domain Name System)**오 라고 한다.
+웹사이트는 외우기 어려운 IP주소 대신 naver.com과 같은 도메인 네임을 사용한다. 도메인 이름을 사용했을 때 입력한 도메인을 실제 네트워크상에서 사용하는 IP 주소로 바꾸고 해당 IP 주소로 접속하는 과정이 필요하다.이러한 과정, 전체 시스템을 **DNS(Domain Name System)** 라고 한다.
 
 DNS는 Root DNS Server, TLD(Top-Level Domain), Authoritative DNS Server로 계층구조를 이루고 있다.
 
@@ -822,7 +822,7 @@ DNS는 Root DNS Server, TLD(Top-Level Domain), Authoritative DNS Server로 계�
 
 <hr>
 
-- DHCP는 ‘Dynamic Host Configuration Protocol(동적 호스트 구성 프로토콜)’의 약자로, 호스트의 IP 주소 및 각종 TCP/IP 프로토콜의 기본 설정을 네트워크에 연결된 장치(클라이언트)에 자동으로 제공해주는 프로토콜을이다. 즉, **네트워크 관리자가 수동으로 할당해야할 IP를 자동으로 할당해주는 역할을 한다.**
+- DHCP는 ‘Dynamic Host Configuration Protocol(동적 호스트 구성 프로토콜)’의 약자로, 호스트의 IP 주소 및 각종 TCP/IP 프로토콜의 기본 설정을 네트워크에 연결된 장치(클라이언트)에 자동으로 제공해주는 프로토콜을이다. 즉, **네트워크 관리자가 수동으로 할당해야할 IP를 자동으로 일정 기간동안 할당(임대)해주는 역할을 한다.**
 - DHCP는 IP주소를 DHCP 서버가 중앙집중식으로 관리하는 클라이언트/서버 모델을 사용한다.
 - DHCP 지원 클라이언트는 네트워크 부팅 과정에서 DHCP서버에 IP 주소를 요청하면 주소를 얻을 수 있다.
 
@@ -845,6 +845,160 @@ DNS는 Root DNS Server, TLD(Top-Level Domain), Authoritative DNS Server로 계�
 ### Reference
 - [DHCP의 정의와 DHCP를 이용해야 하는 이유](https://nordvpn.com/ko/blog/what-is-dhcp/)
 - [DHCP란?](https://jwprogramming.tistory.com/35)
+
+<hr>
+</details>
+
+## ETC
+
+<details>
+<summary>Cookie, Session, JWT의 차이점에 대해 설명해주세요</summary>
+
+<hr>
+
+Http는 무상태성, 비연결성이라 연결의 정보를 저장하고 있지 않는다. 우리가 웹 서비스를 이용하며 이전의 상태를 이용할 수 있는 것은 Cookie와 Session덕분이다.
+
+### Cookie
+
+- 클라이언트가 웹사이트를 방문할 경우, 사이트가 사용하고 있는 서버를 통해 클라이언트의 브라우저에 설치되는 작은 기록 정보 파일이다.
+- Response Header의 `Set-Cookie`필드를 이용한다.
+- 클라이언트는 요청을 보낼 때마다, 매번 저장된 쿠키를 Request Header의 `Cookie`필드에 담아 보낸다.
+
+**단점**
+
+- 보안에 취약합니다.
+    - 요청 시 쿠키의 값을 그대로 보냅니다.
+    - **유출 및 조작 당할 위험이 존재합니다.**
+- 쿠키에는 용량 제한이 있어 많은 정보를 담을 수 없습니다.
+- 웹 브라우저마다 쿠키에 대한 지원 형태가 다르기 때문에 브라우저간 공유가 불가능합니다.
+- 쿠키의 사이즈가 커질수록 네트워크에 부하가 심해집니다.
+
+### Cookie & Session
+
+- 비밀번호 등 클라이언트의 인증 정보를 쿠키가 아닌 서버 측에 저장하고 관리하는 방법이다.
+    - 서버는 클라이언트의 로그인 요청에 대한 응답을 작성할 때, 인증 정보는 서버에 저장하고 클라이언트 식별자인 `JSESSIONID`를 쿠키에 담습니다.
+    - 이후 클라이언트는 요청을 보낼 때마다, `JSESSIONID` 쿠키를 함께 보냅니다.
+    - 서버는 `JSESSIONID` 유효성을 판별해 클라이언트를 식별합니다.
+
+**장점**
+
+- 쿠키를 포함한 요청이 외부에 노출되더라도 세션 ID 자체는 유의미한 개인정보를 담고 있지 않습니다.
+- 각 사용자마다 고유한 세션 ID가 발급되기 때문에, 요청이 들어올 때마다 회원정보를 확인할 필요가 없습니다.
+
+**단점**
+
+- 해커가 `JSESSIONID` 중간에 탈취하여 클라이언트인척 위장할 수 있다는 한계가 존재합니다.
+- 서버에서 세션 저장소를 사용하므로 요청이 많아지면 서버에 부하가 심해집니다.
+
+### JWT
+
+- JWT(JSON Web Token)란 인증에 필요한 정보들을 암호화시킨 토큰을 의미한다.
+- JWT 기반 인증은 쿠키/세션 방식과 유사하게 JWT 토큰(Access Token)을 HTTP 헤더에 실어 서버가 클라이언트를 식별합니다.
+- ****Header****(해싱 알고리즘, 토큰 타입)****, Payload****(토큰에 담을 정보)****, Signature****(인코딩된 Header와 Payload를 더한 뒤 비밀키로 해싱하여 생성)
+    - Header와 Payload는 단순히 인코딩된 값이기 때문에 제 3자가 복호화 및 조작할 수 있지만, Signature는 서버 측에서 관리하는 비밀키가 유출되지 않는 이상 복호화할 수 없습니다. 따라서 Signature는 토큰의 위변조 여부를 확인하는데 사용됩니다.
+
+**장점**
+
+1. Header와 Payload를 가지고 Signature를 생성하므로 데이터 위변조를 막을 수 있습니다.
+2. 인증 정보에 대한 별도의 저장소가 필요없습니다.
+3. JWT는 토큰에 대한 기본 정보와 전달할 정보 및 토큰이 검증됬음을 증명하는 서명 등 필요한 모든 정보를 자체적으로 지니고 있습니다.
+4. 클라이언트 인증 정보를 저장하는 세션과 다르게, 서버는 무상태가 됩니다.
+5. 확장성이 우수합니다.
+6. 토큰 기반으로 다른 로그인 시스템에 접근 및 권한 공유가 가능합니다.
+7. OAuth의 경우 Facebook, Google 등 소셜 계정을 이용하여 다른 웹서비스에서도 로그인을 할 수 있습니다.
+8. 모바일 어플리케이션 환경에서도 잘 동작합니다.
+
+**단점**
+
+1. 쿠키/세션과 다르게 JWT는 토큰의 길이가 길어, 인증 요청이 많아질수록 네트워크 부하가 심해집니다.
+2. Payload 자체는 암호화되지 않기 때문에 유저의 중요한 정보는 담을 수 없습니다.
+3. 토큰을 탈취당하면 대처하기 어렵습니다.
+4. 토큰은 한 번 발급되면 유효기간이 만료될 때 까지 계속 사용이 가능하기 때문입니다.
+5. 특정 사용자의 접속을 강제로 만료하기 어렵지만, 쿠키/세션 기반 인증은 서버 쪽에서 쉽게 세션을 삭제할 수 있습니다.
+
+### Reference
+- [인증 방식 : Cookie & Session vs JWT](https://tecoble.techcourse.co.kr/post/2021-05-22-cookie-session-jwt/)
+
+<hr>
+</details>
+
+<details>
+<summary>이더넷(Ethernet)이란?</summary>
+
+<hr>
+
+- 이더넷은 **하나의 인터넷 회선에** 유/무선 통신장비, 공유기, 허브 등을 통해 **다수의 시스템이 랜선 및 통신포트에 연결되어 통신이 가능한 네트워크 구조**를 말한다.
+
+  > Internet과 다른점
+  >
+  > - Internet은 여러 네트워크를 전세계적으로 연결한 컴퓨터를 의미하지만 이더넷은 Internet내에서 네트워크를 구성하는 방식 중 한 방법이다.
+- 이더넷은 OSI 7계층 중 1계층인 물리계층과 2계층인 데이터 링크 계층에서 구성 형식이 정의된다.
+- 하나의 이더넷 회선에서 여러 시스템이 동시에 통신할 때 발생하는 충돌을 막기 위해 **CSMA/CD(Carrier Sence Multiple Access/ Collision Detection)** 방식으로 제어를 한다.
+
+### Reference
+- [[NW] 🌐 이더넷 이란 무엇인가? 🔌](https://inpa.tistory.com/entry/WEB-🌐-이더넷-이란-무엇인가)
+
+<hr>
+</details>
+
+<details>
+<summary>RPC란?</summary>
+
+<hr>
+
+- RPC(Remote Procedure Call)이란 원격에 위치한 프로그램을 로컬에 있는 프로그램처럼 사용하는 프로토콜이며 분산 서버 환경에서 노드간 통신을 쉽게 하기 위해 나온 방식이다.
+- RPC는 아래의 이미지와 같이 Client와 Server 중간에서 Client가 Server에 메서드 호출을 할 경우, 호출과 결과를 전달해주는 역할을 한다.
+
+  ![Untitled](img/network/rpc.png)
+
+    - Caller(Client) / Callee(Server)
+        - Client, Server가 필요한 비즈니스 로직을 실행하는 Layer로 IDL(Interface definition Language)로 작성된다.
+
+          > IDL이란 인터페이스 정의 언어로 XML, JSON, Proto와 같이 정보를 저장하는 규칙이다.
+    >
+    - Stub
+        - **메소드 스텁(method stub)**은 다른 프로그래밍 기능을 대리하는 코드이다. 즉, 실제 코드를 흉내내거나 아직 개발되지 않은 코드를 임시로 대치하는 역할을 수행한다.
+        - RPC에서는 Stub Compiler가 IDL 파일을 읽어 원하는 언어로 Stub을 생성한다.
+    - RPC runtime
+        - Server와 Client를 Building하는 Layer
+        - 커뮤니케이션 중 발생한 에러처리도 진행한다.
+
+<hr>
+</details>
+
+<details>
+<summary>gRPC란?</summary>
+
+<hr>
+
+- Google에서 개발한 RPC(Remote Procedure Call)시스템이다.
+- TCP/IP 프로토콜과 HTTP 2.0 프로토콜 사용한다.
+- IDL로 protocol buffer를 사용한다.
+
+  > ptoro란?
+  >
+  > - gRPC에서 사용하는 데이터 형식으로 `.proto`파일을 protocol buffer compiler(protoc)를 이용해 컴파일하며 다양한 언어에서 다양한 데이터 스트림을 통해 데이터를 쉽게 읽고 쓸 수 있다.
+  > - JSON과 비교하였을 때, 데이터의 크기가 작아 통신이 빠르고 파싱할 필요도 없다는 장점이 있다.
+- RPC의 특성대로 클라이언트의 어플리케이션은 다른 머신에 있는 서버 애플리케이션의 메서드가 마치 로컬 객체인 것처럼 호출할 수 있다.
+    - 덕분에 분산 서비스를 쉽게 만들 수 있다.
+    - 언어와 상관없이 다른 환경에서 실행이 가능하다.
+
+  ![Untitled](img/network/grpc.png)
+
+- 장점
+    - 성능과 문제 개선
+        - protocol buffer를 통해 리소스 사용량을 크게 줄여 JSON을 사용할 때보다 네크워크 사용량과 응답 속도를 줄일 수 있다.
+    - 서버-클라이언트 Streaming
+        - HTTP 2.0의 multiduplex bidirectional streaming 기능 제공한다.
+    - 다양한 언어에서 사용이 가능하다.
+        - C#, C+, Dart, Go, Java, Kotline, Node, Object-C, PHP, Python, Ruby 지원 (proto3)
+- 단점
+    - 브라우저에서의 사용이 곤란하다.
+        - 브라우저(Client)에서 proto 파일을 가지고 있을 수 없으므로 사실상 사용 불가능
+    - 서버의 proto 파일에 변화가 있을 경우, 클라이언트의 proto 파일도 업데이트해줘야 한다.
+
+### Reference
+- [gRPC란?](https://hirlawldo.tistory.com/119)
 
 <hr>
 </details>
