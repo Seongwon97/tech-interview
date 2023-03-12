@@ -72,7 +72,7 @@ SQL(Structured Query Language)란 관계형 데이터베이스 관리 시스템�
 
 <hr>
 
-트랜잭션 격리수준이란 여러 트랜잭션이 동시에 처리될 떄 특정 트랜잭션이 다른 트랜잭션에서 변경하거나 조회하는 데이터를 볼 수 있게 허용할지 말지를 결정하는 것입니다. 격리 수준을 어떻게 설정하느에 따라 데이터 부정합 문제와 성능에 영향을 줄 수 있다.
+트랜잭션 격리수준이란 여러 트랜잭션이 동시에 처리될 때 특정 트랜잭션이 다른 트랜잭션에서 변경하거나 조회하는 데이터를 볼 수 있게 허용할지 말지를 결정하는 것입니다. 격리 수준을 어떻게 설정하느에 따라 데이터 부정합 문제와 성능에 영향을 줄 수 있다.
 
 격리 수준은 `READ UNCOMMITTED`(Level0), `READ COMMITTED`(Level1), `REPEATABLE READ`(Level2), `SERIALIZABLE`(Level3)이 존재한다.
 
@@ -142,7 +142,7 @@ SQL(Structured Query Language)란 관계형 데이터베이스 관리 시스템�
 
 - 릴레이션을 구성하는 속성들 중 튜플을 유일하게 실별할 수 있는 속성들의 부분집합을 의미한다.
 - 모든 릴레이션은 반드시 하나 이상의 후보키를 가져야 한다.
-- 릴레이션에 있는 모든 튜플에 대해 유일성과 최소성을 만족시켜야 한다.
+- 릴레이션에 있는 모든 튜플에 대해 **유일성**과 **최소성**을 만족시켜야 한다.
   - 유일성: Key로 하나의 Tuple을 유일하게 식별할 수 있다.
   - 최소성: 꼭 필요한 속성으로만 구성된다.
 
@@ -150,11 +150,11 @@ SQL(Structured Query Language)란 관계형 데이터베이스 관리 시스템�
 
 - 한 릴레이션에서 특정 튜플을 유일하게 구별할 수 있는 속성으로 후보키중에서 선택된 Main key이다.
 - 무결성 특징을 갖는다.
+
+  > 무결성이란 데이터의 정확성과 일관성을 유지하고, 데이터의 결손과 부정합이 없음을 보증하는 것을 의미한다.
+  >
   - Null값을 가질 수 없다.
   - 중복된 값이 저장될 수 없다.
-
-  > 데이터의 정확성과 일관성을 유지하고, 데이터의 결손과 부정합이 없음을 보증하는 것
->
 
 > 기본키는 수정이 가능할까?
 >
@@ -169,7 +169,7 @@ SQL(Structured Query Language)란 관계형 데이터베이스 관리 시스템�
 
 - 한개의 릴레이션 내에 있는 속성들의 집합으로 구성된 키이다.
   - ex) <학생> 릴레이션에 '학번', '주민번호', '학번'+'주민번호', '학번'+'주민번호'+'성명' 등으로 슈퍼키를 구성할 수 있습니다.
-- 릴레이션을 구성하는 모든 튜플에 대해 유일성은 만족하지만 최소성은 만족시키지 못한다.
+- 릴레이션을 구성하는 모든 튜플에 대해 **유일성은 만족하지만 최소성은 만족시키지 못한다.**
   - 집합에 속한 모든 속성을 엮지 않아도 유일성이 있는 슈퍼키를 만들 수 있는 상황이 존재하여 최소성을 만족하지 못한다 한다.
 
 **외래키 (Foreign Key)**
@@ -385,7 +385,7 @@ Yes. 외래키는 Null이 허용된다.
 
   > 완전 함수적 종속이란?
   기본키의 부분집합이 결정자가 되어서는 안된다는 것을 의미한다.
->
+
 - 즉, 테이블에서 기본키가 복합키(키1, 키2)로 묶여있을 때, 두 키 중 하나의 키만으로 다른 컬럼을 결정지을 수 있으면 안된다는 뜻이다. → 키1 만으로 다른 컬럼의 값을 알 수 있으면 안 된다.
 
 **3NF**
@@ -393,16 +393,15 @@ Yes. 외래키는 Null이 허용된다.
 - 제2정규화를 진행한 테이블에 대해 기본키가 아닌 **모든 속성이 기본키에 대해 이행적 종석을 만족하지 않도록** 테이블을 분해하는 것이다.
 
   > 이행적 함수 종속은 A→B, B→C이면 A→C가 성립되는 것을 의미한다.
->
+  >
+  >
+  > e.g. 아래의 링크의 예시에서는 Id, 등급, 할인율 컬럼이 있을 때, ID를 통해 등급을 확인할 수 있고, 등급을 통해 등급별 할인율을 매칭할 수 있다면, ID를 통해서도 할인율을 알 수 있는 종속성이 생기게 되는데 이것이 바로 이행적 종속이다.
+
 
 **BCNF (Boyce-Codd Normal Form)**
 
 - 제3정규화를 진행한 테이블에 대해 **결정자가 모두 후보키**가 되도록 테이블을 분해하는 것이다.
 - 3NF에서 후보키가 여러 개 존재하고 서로 중첩되는 경우에 적용하는 강한 3 정규형이라고도 한다.
-- 제약조건
-  - 키가 아닌 모든 속성은 각 키에 대하여 완전 종속해야 한다.
-  - 키가 아닌 모든 속성은 그 자신이 부분적으로 들어가 있지 않은 모든 키에 대하여 완전 종속해야 한다.
-  - 어떤 속성도 키가 아닌 속성에 대해서는 완전 종속할 수 없다.
 
 **4NF**
 
@@ -461,7 +460,7 @@ Yes. 외래키는 Null이 허용된다.
 - RDMBS와 다르게 정해진 스키마를 따르지 않고 다른 구조의 데이터를 같은 컬렉션에 추가 가능하다.
 - Join이라는 개념이 존재하지 않는다.
   - Join을 하고 싶다면 컬렉션을 통해 데이터를 복제 후, 각 컬렉션 일부에 속하는 데이터를 정확하게 산출하도록 한다.
-  - 데이터의 중복이 있어 서로 영향을 줄 위험이 존재한다. 그래서 데이터 변경이 거의 없는 경우 NoSQL을 사용하면 효울적이다.
+  - 데이터의 중복이 있어 서로 영향을 줄 위험이 존재한다. 그래서 데이터 변경(수정)이 거의 없는 경우 NoSQL을 사용하면 효울적이다.
 - 다양한 저장 형태가 존재한다.
   - Key-Value Database
   - Document Database
@@ -634,7 +633,7 @@ DBMS는 Index를 항상 최신의 상태로 유지해야지 원하는 값을 빠
 
 클러스터링 인덱스는 리프 노드에 같은 무리의 인덱스 데이터를 물리적으로도 묶어서 저장한다.
 
-특징
+#### 특징
 
 - 실제 데이터 자체가 정렬되어 저장된다.
 - 테이블당 1개만 존재 가능하다.
@@ -661,7 +660,7 @@ CREATE INDEX idx_name
 ON member(name);
 ```
 
-특징
+#### 특징
 
 - 실제 데이터 페이지는 그대로 존재한다.
 - 별도의 인덱스 페이지 생성하여 데이터를 저장한다. → 추가 공간 필요
@@ -707,19 +706,20 @@ MySQL InnoDB의 경우 기본적으로 클러스터링 테이블을 생성하여
 - DB 장애 발생시 복구에 사용되는 Log로 MySQL 장애시 Buffer Pool에 저장되어 있던 데이터의 유실을 방지(데이터 복구)하기 위해 사용된다.
 - Redo Log를 알기 위해서는 InnoDB의 Buffer Pool 동작 원리를 조금 알아야 한다.
   - MySQL은 Commit이 발생하면 Disk I/O작업을 줄이기 위해 디스크 영역으로 저장하는 것이 아닌 메모리 영역인 (Buffer Pool & Log Buffer)에 데이터가 들어간다. 이때 Buffer Pool은 메모리 공간이기에 MySQL 장애시 Buffer Pool의 내용은 사라지게 된다.
-  - Commit이 발생하였을 때, 바로 Disk에저장하지 않아 에러가 발생하였을 때, 이전의 작업 내용을 복구하기 위해 Undo Log를 사용한다.
+  - Commit이 발생하였을 때, 바로 Disk에저장하지 않아 에러가 발생하였을 때, 이전의 작업 내용을 복구하기 위해 Redo Log를 사용한다.
 
     > InnoDB Buffer Pool은 InnoDB엔진이 Table Caching및 Index Data Caching을 위해 사용하는 메모리 공간이다.
->
+
+
 - Redo Log는 Redo log buffer와 Redo log file을 통해 동작한다.
   - 데이터의 변경이 발생하면 MySQL은 먼저 메모리에 위치한 Redo log buffer에 변경된 데이터를 기록한다. → Redo log buffer도 메모리 공간이라 MySQL장애가 발생하면 데이터가 사라진다. 그래서 디스크에 위치한 Redo log file에 데이터를 백업해두는 작업을 진행한다.
   - Redo log buffer는 checkpoint 이벤트가 발생하면 Redo log buffer에 있던 데이터를 Redo log file로 저장하게 된다.
   - 에러가 발생하면 Redo log buffer에 있는 데이터를 통해 복구를 진행한다.
 
     > Checkpoint이전에 장애가 발생하면 복구 불가
-  >
+  
 
-  > Redo log buffer가 Redo log file로 데이터를 저장하는 LGWR 프로세스가 동자할 때
+  > Redo log buffer가 Redo log file로 데이터를 저장하는 LGWR 프로세스(checkpoint)가 동작할 때는 아래와 같다.
   >
   > - 데이터베이스 커밋(commit)이 수행되었을 때
   > - 리두 로그 버퍼가 1/3이상 찼을 때
@@ -754,7 +754,7 @@ InnoDB는 변경해야 할 인덱스 페이지가 Buffer Pool에 있으면 바�
 
 <hr>
 
-- MVCC(Multi Version Concurrency Control)는 하나의 레코드에 대해 2개의 버전이 유지되고, 필요에 따라 보여지는 데이터가 다른 구조를 의미한다.
+- MVCC(Multi Version Concurrency Control)는 하나의 레코드에 대해 여러 버전이 유지되고, 필요에 따라 보여지는 데이터가 다른 구조를 의미한다.
 - 트랜잭션 격리수준에서 READ_UNCOMMITTED를 제외한 상위 레벨의 격리수준의 경우 커밋되지 않은 데이터는 다른 트랜잭션에서 볼 수 없기에 InnoDB Buffer pool이나 Disk에 있는 내용 대신 Undo Log에 기록해준 변경되기 이전의 데이터를 반환해주는데 이러한 과정을 MVCC라고 한다.
 
 <hr>
@@ -765,20 +765,46 @@ InnoDB는 변경해야 할 인덱스 페이지가 Buffer Pool에 있으면 바�
 
 <hr>
 
-> InnoDB 스토리지 엔진의 락
+### Row-Level Lock 
+
+> InnoDB에서 Row-level의 Lock은 **Shared Lock(공유락)** 과 **Exclusive Lock(베타락)** 으로 2가지 유형이 존재한다.
 >
 
-**레코드(Record) 락**
+#### Shared Lock(공유 락, S Lock)
+
+- 특정 Row를 읽을(Read) 때 사용되는 Lock이다.
+- 여러 트랜잭션이 동시에 한 Row에 Shared Lock을 걸 수 있다. → 하나의 Row를 여러 트랜잭션이 동시에 읽을 수 있다.
+- Shared Lock이 설정된 Row에는 Exclusive Lock을 사용할 수 없다.
+- InnoDB에서 일반적인 `SELECT` 쿼리는 Lock을 사용하지 않는다. 하지만 `SELECT .. FOR SHARE` 등의 일부 쿼리는 각 Row에 Shared Lock을 건다.
+
+#### Exclusive Lock(배타 락, X Lock)
+
+- 특정 Row를 변경(write)할 때 사용된다.
+- 특정 Row에 Exclusive Lock이 걸려있을 경우, 다른 트랜잭션은 읽기 작업을 위해 Shared Lock을 걸거나, 쓰기 작업을 위해 Exclusive Lock을 걸 수 없다. → 쓰기 작업을 하고 있는 Row에는 모든 접근이 불가하다.
+- `SELECT … FOR UPDATE`, `UPDATE`, `DELETE` 등의 수정 쿼리들이 실행될 때 Row에 걸린다.
+
+### Index record & Gap Lock
+
+> **Record Lock**, **Gap Lock**, **Next Key Lock** 은 Row가 아닌 DB의 index record와 record사이의 간격에 걸리는 Lock이다.
+>
+
+#### 레코드(Record) 락
 
 - 레코드 락이란 레코드 자체만을 잠그는 것을 의미한다. InnoDB 스토리지 엔진은 레코드 자체가 아니라 인덱스의 레코드를 잠그는 방식으로 동작한다.
+- record lock안에서도 Shared Lock과 Exclusive Lock이 존재한다.
+  - 읽기 작업이 발생할 경우 Shared Lock, 쓰기 작업이 있을 경우 Exclusive Lock이 걸린다.
 
-**갭(GAP) 락**
+#### 갭(GAP) 락
 
 - 갭 락은 레코드 자체가 아니라 레코드와 바로 인접한 레코드 사이의 간격을 잠그는 것을 의미한다. 갭 락의 역할은 레코드와 레코드 사이의 간격에 새로운 레코드가 생성되는 것을 제어한다.
 
-**넥스트 키 락(Next key lock)**
+#### 넥스트 키 락(Next key lock)
 
 - 레코드 락과 갭 락을 합쳐놓은 것을 의미한다.
+
+
+### 📚 Reference
+- [Lock의 종류 (Shared Lock, Exclusive Lock, Record Lock, Gap Lock, Next-key Lock)](https://jaeseongdev.github.io/development/2021/06/16/Lock의-종류-(Shared-Lock,-Exclusive-Lock,-Record-Lock,-Gap-Lock,-Next-key-Lock)/)
 
 <hr>
 </details>
