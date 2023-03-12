@@ -1,94 +1,89 @@
-# ️운영체제
+# Operating System
 
-[**운영체제란?**](../Operation_System/운영체제란.md)
-- 운영체제란 무엇일까요?
-- 커널이란 무엇일까요?
-- 운영체제는 어떤 기능을 하는지 설명해주세요
-- 운영체제가 관리하는 5가지 지원에 대해 설명해주세요
+## 운영체제란?
+<details>
+<summary>운영체제란 무엇일까요?</summary>
 
-[**프로세스와 스레드**](../Operation_System/Process&Thread.md)
-- 프로세스와 프로세서의 차이에 대해 설명해주세요.
-- 프로세스와 스레드의 차이를 설명해주세요
-- 프로세스의 주소 공간에는 어떤 것이 있을까요?
-- 프로세스의 Data, Stack, Heap영역에는 각각 어떤 데이터가 저장되는지 설명해주세요
-- 프로세스의 상태에는 어떤 것이 있을까요?
-- 프로세스의 Running State에서 CPU 자원을 뺐기는 3가지 상황에 대해 설명해주세요
-- OS는 프로세스의 정보를 어떻게 관리하며 어떤 데이터들을 저장하고 있는지 설명해주세요 (hint.PCB)
-- PCB가 왜 필요할까요?
-- 멀티 스레드와 멀티 프로세스의 차이에 대해 설명해주세요
-- 멀티 프로세스 대신 멀티 스레드를 사용하는 이유를 설명해주세요.
-- 스레드마다 독립적으로 관리하는 공간은 무엇이며 왜 독립적으로 할당할까요?
-- 커널 스레드와 유저 스레드의 차이에 대해 설명해주세요
+<hr>
 
-[**Context Switching**](../Operation_System/Context_Switching.md)
-- Context Switching에 대해 설명해주세요
-- Context Switching Overhead에 대해 설명해주세요
+**운영 체제(OS, Operating System)** 란 컴퓨터 시스템의 자원을 효율적으로 관리하며 사용자가 컴퓨터를 편리하고 효과적으로 사용할 수 있는 환경을 제공하는 여러 프로그램들의 모임이다. 그리고 응용 프로그램과 하드웨어 간의 인터페이스로서 다른 응용 프로그램이 유용한 작업을 할 수 있도록 환경을 제공해준다.
 
-[**IPC**](../Operation_System/IPC.md)
-- 프로세스간 통신은 어떻게 할까요?
-- IPC에는 어떤 방법들이 있을까요?
+넓은 의미에서는 커널 뿐만 아니라 시스템을 위한 유틸리티를 포함하는 개념을 갖고 있으며 좁은 의미에서는 메모리에 올라가있는 커널을 의미한다.
 
-[**System Call**](../Operation_System/SystemCall.md)
-- System Call이란 무엇일까요?
-- System Call과 Function Call의 차이점에 대해 설명해주세요
-- 사용자 모드와 커널 모드에 대해 설명해주세요
+> 커널이란?
+>
+> - 전체 운영체제 코드 중 메모리에 올라가있는 부분을 커널이라고 한다.
 
-[**Interrupt**](../Operation_System/Interrupt.md)
-- 인터럽트란 무엇일까요?
-- 인터럽트는 시그널을 하드웨어적으로 확인할까요? 소프트웨어적으로 할까요?
-- 인터럽트 벡터와 인터럽트 서비스 루틴에 대해 설명해주세요
-- 인터럽트 실행 과정에 대해 설명해주세요
+<hr>
+</details>
 
-[**CPU Scheduling**](../Operation_System/CPU%20Scheduling.md)
-- CPU 스케줄링이란 무엇일까요?
-- 장기, 중기, 단기 스케줄러로 나누는 기준에 대해 설명해주세요
-- 선점과 비선점의 차이에 대해 설명해주세요
-- CPU Scheduling의 종류에는 무엇이 있을까요?
-- FCFS, SJF, SRTF, Priority scheduling, RR 스케줄링은 각각 무엇이며 장단점은 무엇이 있을까요?
-- 선점 스케줄링과 비선점 스케줄링에는 각각 어떤 것이 있을까요?
-- Starvation은 어떤 스케줄링에서 발생하는 문제일까요?
-- Aging이란 무엇일까요?
+<details>
+<summary>운영체제는 어떤 기능을 하는지 설명해주세요</summary>
 
-[**데드락**](../Operation_System/Deadlock.md)
-- 데드락이란 무엇일까요?
-- 데드락이 발생하는 4가지 조건에 대해 설명해주세요
-- 데드락이 발생할 수 있는 자원의 종류에는 무엇이 있을까요?
-- 데드락을 예방, 회피, 무시의 차이에 대해 설명해주세요
-- Banker’s Algorithm은 예방, 회피, 무시 중 어떤 방법에 속할까요?
+<hr>
 
-[**Synchronize**](../Operation_System/Synchronize.md)
-- 경쟁 상태(Race Condition)에 대해 설명해주세요
-- 경쟁 상태(Race Condition)는 어떤 상황에서 발생할까요?
-- 경쟁 상태(Race Condition)를 해결하는 방법에는 어떤 방법이 있을까요?
-- 임계영역(Critical Section)에 대해 설명해주세요
-- Critical Section의 필요조건에는 무엇이 있을까요?
-- Thread-safe에 대해 설명해주세요. (hint: critical section)
-- Semaphore와 Mutex Lock의 차이에 대해 설명해주세요
-- Semaphore에서 발생할 수 있는 문제점에 대해 설명해주세요
-- Priority Inversion은 무엇일까요?
+- CPU 스케줄링
+- 메모리 관리
+- 파일 관리
+- 입출력 관리
+- 프로세스 관리
+- 네트워킹
+- 보호
+    - 시스템의 오류를 검사하고 복구합니다.
+    - 자원 보호 기능을 제공합니다.
 
-[**Memory**](../Operation_System/Memory.md)
-- 메모리 계층 구조를 설명해주세요
-- 가상 주소는 왜 사용할까요?
-- 가상 주소를 물리 주소로 할당하는 3가지 방법은 무엇이 있으며 각각의 특징에 대해 설명해주세요.
-- MMU에 대해 설명해주세요
-- 캐시란 무엇일까요?
-- 캐시의 지역성에 대해 설명해주세
+<hr>
+</details>
 
-[**Memory Allocation (feat. Paging, Segmentation)**](../Operation_System/Memory%20Allocation.md)
-- 메모리 연속 할당(Contiguous Memory Allocation)이란 무엇인지와 장단점에 대해 설명해주세요
-- Paging에 대해 설명해주세요
-- Paging이 필요한 이유(장때)에 대해 설명해주세요
-- Segmentation에 대해 설명해주세요
-- Paging과 Segmentation의 차이점에 대해 설명해주세요
-- 외부 단편화(External Fragmentation)와 내부 단편화(Internal Fragmentation)에 대해 설명해주세요
-- TLB에 대해 설명해주세요
+<details>
+<summary>운영체제가 관리하는 5가지 지원에 대해 설명해주세요</summary>
 
-[**Virtual Memory, Page Replacement Algorithm**](../Operation_System/Virtual%20Memory,%20Page%20Replacement%20Algorithm.md)
-- 가상 메모리에 대해 설명해주세요
-- Swapping에 대해 설명해주세요
-- Demand Paging에 대해 설명해주세요
-- 페이지 교체의 전반적인 순서에 대해 설명해주세요
-- 페이지 교체 알고리즘은 어떤 것이 있을까요?
-- LRU 페이지 교체 알고리즘에서 가장 오랫동안 사용하지 않은 Victim Page를 선정하는 방법은 어떤 방법이 있을까요?
-- Reference Bit에 대해 설명해주세요
+<hr>
+
+**프로세스 관리**
+
+- 프로세스의 스케줄링과 동기화 관리를 담당한다.
+- 프로세스의 생성과 제거, 시작과 정지, 메시지 전달 등의 기능을 담당한다.
+
+**저장장치 관리**
+
+저장장치에는 1차 저장장치인 메인 메모리와 2차 저장장치인 하드디스크, NAND등이 있다. 운영체제는 이러한 저장장치를 관리하며 프로세스에게 메모리 할당 및 회수, 파일 생성과 삭제, 변경, 유지 등의 관리를 한다.
+
+- 1차 저장장치 (Main Memory)
+    - 프로세스에 할당하는 메모리
+    - 영역의 할당과 해제각 메모리 영역 간의 침범 방지
+    - 메인 메모리의 효율적 활용을 위한 가상 메모리 기능
+- 2차 저장장치(HDD, NAND Flash Memory 등)
+    - 파일 형식의 데이터 저장
+    - 이런 파일 데이터 관리를 위한 파일 시스템을 OS에서 관리
+    - `FAT, NTFS, EXT2, JFS, XFS` 등 많은 파일 시스템들이 개발되어 사용 중
+
+**네트워킹**
+
+TCP/IP기반의 인터넷에 연결하거나 응용 프로그램이 네트워크를 사용하면 OS에서 네트워크 프로토콜을 지원해야한다. 이처럼 OS는 응용 프로그램과 하드웨어 사이의 인터페이스 역하을 하며 하드웨어를 소프트웨어적으로 제어 및 관리를 하는 것을 알 수 있다.
+
+**주변장치 관리**
+
+- 입출력 장치의 스케줄링 및 전반적인 관리를 담당한다.
+- 디바이스 드라이버를 OS가 관리하여 여러 하드웨어를 사용할 수 있게 해준다.
+
+**사용자 관리**
+
+사용자별 계정을 관리할 수 있는 사용자 관리 기능을 제공한다.
+
+<hr>
+</details>
+
+<details>
+<summary>시분할 시스템, 다중 프로그래밍 시스템, 대화형 시스템은 각각 무엇을 의미할까요?</summary>
+
+<hr>
+
+- CPU 작업시간을 여러 프로그램이 나누어 쓰는 시스템을 **시분할 시스템(time sharing system)**이라고 부른다.
+- 메모리 공간을 분할해 여러 프로그램들을 동시에 메모리에 올려서 처리하는 시스템을 **다중 프로그래밍 시스템(multi-programming system)**이라고 한다.
+- 사용자 관점에서 각 프로그램에 대한 키보드 입력의 결과를 곧바로 화면에 보여주는 것과 같은 시스템을 **대화형 시스템(interactive system)**이라고 한다.
+
+→ 세 시스템 모두 여러 프로그램이 하나의 컴퓨터에서 동시에 실행되는 다중작업용 운영체제에 속한다.
+
+<hr>
+</details>
