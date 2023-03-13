@@ -206,3 +206,137 @@ fuction call은 같은 process 내에서 process 내에 있는 function 을 불�
 
 <hr>
 </details>
+
+## 프로세스와 스레드
+<details>
+<summary>프로세스와 프로세서의 차이에 대해 설명해주세요.</summary>
+
+<hr>
+
+- 프로세스는 코드로 작성된 프로그램이 메모리에 적재되어 사용할 수 있는 상태가 된 것이다. 즉, 메모리 상에서 실행중인 프로그램을 프로세스라고 한다.
+- 프로세서는 CPU를 의미한다.
+
+<hr>
+</details>
+
+<details>
+<summary>프로세스와 스레드의 차이를 설명해주세요</summary>
+
+<hr>
+
+- 프로세스는 메모리에 적재된 하나의 프로그램을 의미한다.
+- 스레드는 CPU에서 동작하는 가장 작은 단위의 작업 단위이다.
+
+> 프로세스는 운영체제로부터 자원을 할당받는 작업의 단위이고 스레드는 프로세스가 할당받은 자원을 이용하는 실행의 단위이다.
+
+> 하나의 프로세스는 1개 이상의 여러 스레드가 들어갈 수 있으며 컨테이너는 스레드를 관리하는 컨테이너로 볼 수 있다.
+
+<hr>
+</details>
+
+<details>
+<summary>프로세스의 주소 공간은 어떻게 이루어져 있을까요? 그리고 각각의 주소 공간에는 어떤 데이터가 저장될까요?</summary>
+
+<hr>
+
+- **Text (Code)**: 코드 자체를 구성하는 메모리 영역
+- **Data**:  전역변수, 정적 변수, 배열과 같은 static data (global variable)
+  - 초기화된 데이터는 data 영역에 저장하며 초기화되지 않은 데이터는 bss 영역에 저장한다.
+- **Stack**: 지역변수, 매개변수, 리턴 값과 같은 데이터를 저장하는 임시 메모리 영역이다. (local variable, function parameter, return address)
+- **Heap**: run time 시점에 동적 할당되는 데이터들이 저장된다. (malloc, java object)
+
+  > C에서 Pointer 변수 같은 경우 stack에는 데이터의 주소값들이 저장이 되고 heap에는 실제 값이 저장된다.
+
+  > Java의 경우 객체 생성에서 비슷한 예시가 있다.
+  >
+  >
+  > ![Untitled](img/os/process_stack_heap.png)
+  >
+  > int a,b는 local variable이어서 stack에 저장이 되고 class1 obj도 local variable이어서 stack에 저장이 되는데 object의 실제 내용은 heap에 저장이 되고 stack에서는 주소값을 갖고 있다. object는 생성이 되면 처음에는 stack에 주소값만 생성이 되고 실제로 할당이 되면 그때서야 heap이 생성되고 실제 데이터가 저장이 된다.
+
+<hr>
+</details>
+
+<details>
+<summary>프로세스 주소 공간을 나눈 이유는 무엇일까요?</summary>
+
+<hr>
+
+최대한 데이터를 공유하며 메모리 사용량을 줄이기 떄문이다.
+
+Code와 같은 프로그램 자체의 정보는 같은 변함이 없는 같은 내용이기에 따로 관리를 하며 공유를 한다. 반면에 Stack, Data는 스택 구조의 특성과 전역 변수의 활용성을 위해서 나누게 되었다.
+
+<hr>
+</details>
+
+<details>
+<summary>프로세스의 상태에는 어떤 것이 있을까요?</summary>
+
+<hr>
+
+![Untitled](img/os/process_state.png)
+
+- **New**: process가 생성중인 상태
+- **Ready**: CPU를 사용하려고 기다리는 상태 (할당이 되면 바로 시행하려고 proces 가 메모리에 올라가 있다.)
+- **Running**: CPU를 잡고 instruction을 수행중인 상태
+- **Blocked(wait, sleep)**: CPU를 주어도 당장 instruction을 수행할 수 없는 상태, process 자신이 요청한 event (I/O, 공유하는 데이터 등)가 즉시 만족되지 않아 이를 기다리는 상태이다. 요청한 event가 수행을 마치면 interrupt를 발생시키고 blocked상태의 process를 ready queue에 옮겨준다.
+- **Terminated**: 수행이 끝난 상태
+
+<hr>
+</details>
+
+<details>
+<summary>프로세스의 Running State에서 CPU 자원을 뺐기는 3가지 상황에 대해 설명해주세요</summary>
+
+<hr>
+
+1. Interrupt가 발생했을 때 (timer도 포함)
+2. I/O request를 하기 위해 system call을 하여 waiting상태로 넘어가는 경우
+3. Process의 수행이 끝나서 terminated로 되는 경우
+
+<hr>
+</details>
+
+<details>
+<summary>OS는 프로세스의 정보를 어떻게 관리하며 어떤 데이터들을 저장하고 있는지 설명해주세요 (hint.PCB)</summary>
+
+<hr>
+각각의 Process들은 OS의 관리를 받게 되는데 이때 OS는 process의 현재 정보들을 알기 위해 PCB(Process Control Block)를 사용한다.
+
+PCB는 아래의 정보들을 저장하고 있다.
+
+- Process **state**
+- Process number: process id (**pid**)
+- **Program counter** (PC) - next instruction address
+- **CPU register** – contents of registers (in CPU)
+- etc (Owner, CPU Usage, Memory Usage, Process Priority, I/O status information)
+
+<hr>
+</details>
+
+<details>
+<summary>PCB가 왜 필요할까요?</summary>
+
+<hr>
+
+CPU core는 하나의 프로세스가 사용하지 않고 여러 프로세스가 공유해서 사용한다. 이때 프로세스의 교체(Context switching)이 발생할 때마다 실행중인 CPU에 올라간 프로세스의 정보를 변경해야하고, 프로세스들은 추후 CPU 이용 순서가 왔을 때 이전 작업 내용을 이어서 하기 위해 정보를 저장해야할 필요가 있다. 운영체제는 이러한 프로세스의 정보를 PCB를 통해 저장하고 관리하고 있다.
+
+Context Switching이 발생할 때는 PCB의 값들을 변경하게 되며 PCB의 정보를 통해 연산을 이어서 한다.
+
+<hr>
+</details>
+
+<details>
+<summary>PCB는 어떻게 관리될까요??</summary>
+
+<hr>
+
+- kernel의 data영역은 CPU, memory, disk등의 데이터들을 각각 갖고 있다. 그리고 각각의 process의 정보들을 갖고 있는 PCB들이 존재한다. 즉, PCB는 kernel의 data 영역에서 관리된다.
+
+  ![Untitled](img/os/pcb_in_os.png)
+
+- 이때 PCB들은 Linked List 방식으로 관리가 된다. PCB List Head에 PCB들이 생성될 때마다 붙게 된다. 주소값으로 연결이 이루어져 있는 연결리스트이기 때문에 삽입 삭제가 용이하다.
+- 프로세스가 생성되면 PCB가 생성되고 프로세스가 종료되면 PCB도 제거된다.
+
+<hr>
+</details>
