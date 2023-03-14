@@ -340,3 +340,211 @@ Context Switching이 발생할 때는 PCB의 값들을 변경하게 되며 PCB�
 
 <hr>
 </details>
+
+<details>
+<summary>Process Context란 무엇일까요?</summary>
+
+<hr>
+
+- 프로세스 문맥(Process Context)이란 프로세스가 현재 어떤 상태에서 수행되고 있는지 정확히 규명하기 위해 필요한 정보를 의미한다.
+- 시분할 시스템에서는 CPU의 제어권을 공유하기에 프로세스를 재개하는 시점에 대한 정보를 알기 위해 Process Context를 이용한다.
+- 프로세스의 주소공간(코드, 데이터, 스택 상태)등을 비롯해 레지서터의 값, 시스템 콜 등을 통해 커널에서 수행한 일의 상태, 프로세스에 관해 커널이 관리하고 있는 각종 정보 등을 포함한다.
+- 하드웨어 문맥, 프로세스 주소 공간, 커널상의 문맥으로 나누어볼 수 있다.
+  - 하드웨어 문맥: CPU의 수행 상태를 나태는 것으로 **PC**와 **레지스터**에 저장한 값들
+  - 프로세스 주소 공간: **코드**, **데이터**, **스택**으로 구성되는 주소공간
+  - 커널 상의 문맥: **PCB**, **커널 스택**과 같은 자료구조
+- 실행중인 프로세스가 발생할 때, 문맥을 교환하는 것을 Context Switching이라고 한다.
+  - Context Switching은 타이머 인터럽트나 입출력 요청 시스템 콜을 통해 프로세스가 blocking 상태로 이동할 때만 발생하며, 그 외의 system call이나 context switching에는 발생하지 않는다.
+
+    > 단순히 사용자 모드에서 커널 모드로 바뀌어 특권명령을 수행하는 시스템 콜이나 인터럽트는 단순히 커널 모드에서 처리하고 사용자모드로 바뀌게 된다. context switching은 없다!!!
+
+
+<hr>
+</details>
+
+<details>
+<summary>IPC란 무엇일까요?</summary>
+
+<hr>
+
+경우에 따라서 독립적인 프로세스들이 협력할 때 업무의 효율성이 증진될 수 있다.
+
+- 부분적인 처리 결과나 정보 공유, 처리 속도 향상 등
+
+이를 위해 운영체제는 프로세스간 협력 메커니즘을 제공한다. 대표적으로는 **IPC(Inter-Proess Communiacation)**이 있다.
+
+즉, IPC란 하나의 컴퓨터 안에서 실행 중인 서로 다른 프로세스간에 발생하는 통신을 말한다.
+
+### IPC 종류
+
+> 대표적인 Message Passing과 Shared Memory만 알아도 된다.
+>
+
+**익명 PIPE**
+
+익명 파이프는 부모-자식 프로세스간 통신처럼 통신할 프로세스를 명확히 알 수 있는 경우에 사용한다.
+
+파이프는 두 개의 데이터를 연결하는데 하나의 프로세스는 데이터를 쓰기만하고, 다른 프로세스는 데이터를 읽기만하는 단방향 통신이다. (**반이중 통신**이라고도 불린다.) 그래서 양방향 통신을 하고 싶으면 2개의 파이프를 만들어야 한다.
+
+간단하게 사용할 수 있는 장점이 있고 단순한 데이터의 흐름을 가질 땐 해당 파이프를 사용하는 것이 효율적이나 **전이중통신(양방향 통신)**을 위해 2개의 파이프를 만들어야 할 때는 구현이 복잡해진다는 단점이 있다.
+
+**Named PIPE(FIFO)**
+
+Named 파이프는 전혀 모르는 상태의 프로세스들 사이의 통신에 사용한다.
+
+부모 프로세스와 무관한 다른 프로세스도 통신이 가능하다. 하지만 익명 파이프처럼 읽기/쓰기가 동시에 불가능하여 전이중 통신을 만들기 위해서는 2개의 파이프를 만들어야 한다.
+
+**Message Passing**
+
+두 프로세스의 주소 공간이 달라 메시지를 직접 전달할 수는 없고 통신하기를 원하는 두 프로세스 사이에 communication link를 생성한 후 커널의 `send()`, `recieve()` 연산을 통해 메시지를 주고받는다.
+
+> `send()`, `recieve()` 연산은 시스템 콜을 통해 사용할 수 있다.
+>
+
+메시지 전달은 전송 대상이 다른 프로세스인지 아니면 메일박스라는 일종의 저장공간인지에 따라 다시 직접 통신(direct communication)과 간접 통신(indirect communication)으로 나뉘게 된다.
+
+**Shared Memory**
+
+파이프, 메시지 큐가 통신을 이용한 설비라면, **공유 메모리는 데이터 자체를 공유하도록 지원하는 설비**이다.
+
+Shared memory를 사용하면 특수한 공간이 생기는데 이 공간을 process들이 각자 자신의 공간이라고 생각하며 사용한다. 프로세스가 공유 메모리 할당을 커널에 요청하면 커널은 해당 프로세스에 메모리 공간을 할당해주고 이후에 모든 프로세스는 해당 메모리에 접근할 수 있다.
+
+해당 방법은 중개자 없이 곧바로 메모리에 접근할 수 있어서 IPC 중에서 가장 빠르게 작동한다. 하지만 2개 이상의 Process가 동시에 접근하려는 문제(Proces synchronization)와 Multi Processor에서의 Cache Coherence Problem이 발생할 수 있다.
+
+**Memory Map**
+
+공유 메모리처럼 메모리를 공유하는 방법이다. 메모리 맵은 열린 파일을 메모리에 매핑시켜 공유하는 방식이다.
+
+주로 파일로 대용량 데이터를 공유해야 할 때 사용한다.
+
+**Socket**
+
+네트워크 통신을 통해 데이터를 공유한다.
+
+클라이언트와 서버가 소켓을 통해서 통싢는 구조로 원격에서 프로세스간 데이터를 공유할 때 사용한다.
+
+> 이러한 IPC 통신에서 프로세스 간 데이터를 동기화하고 보호하기 위해 세마포어와 뮤텍스를 사용한다.
+
+<hr>
+</details>
+
+<details>
+<summary>스레드란 무엇일까요?</summary>
+
+<hr>
+
+CPU가 동작하는 가장 작은 단위를 스레드(thread)라고 한다.
+사용자들이 2개의 같은 program을 이용하는 경우는 program들은 동일한 code를 실행하고 data들을 공유하고 싶을 것이다. 그래서 code와 data를 같이 공유하며 사용하자라고 만든 것이 thread이다
+
+- 하나의 Process는 한개 이상의 스레드로 구성된다.
+- 동일한 프로그램을 여러 개 띄우더라도 process가 하나만 만들어진다. (code, data이 하나만 만들어진다는 뜻.)
+- IPC없이 바로 shared memory에 접근 가능하다
+- Process들끼리 바꾸는 context switching보다 Thread를 변경하는 것이 overhead가 적다.
+- 새로운 스레드를 만들 때는 PC, Register, Stack에 대한 공간만 만들면 됨으로 프로세스를 만드는 것보다 memory와 time 측면에서 이점이 있다.
+
+<hr>
+</details>
+
+<details>
+<summary>하나의 프로세스 안에서 만들어진 스레드들간 공유하는 공간과 독립적으로 할당하는 공간은 각각 무엇이 있을까요?</summary>
+
+<hr>
+
+- 공유하는 공간: Code, Data (OS Resource도 공유한다.)
+- 각각 관리하는 공간: PC, Register, Stack
+  - TCB(Thread Control Block)으로 관리
+
+<hr>
+</details>
+
+<details>
+<summary>커널 스레드와 유저 스레드란 무엇일까요?</summary>
+
+<hr>
+
+### Kernel thread
+
+- thread_create system call을 통해 생성되며 Kernel의 support를 받아 kernel이 thread의 존재를 알게 된다.
+- 각각의 thread는 TCB를 갖는다. (TCB의 정보들은 PCB안에 있다.)
+- **장점** : Parallelism과 Concurrency를 지원한다.
+
+  (Concurrency: 하나의 스레드가 block 상태에 있어도 다른 스레드가 실행 가능하다.)
+
+- **단점** : thread들은 kernel을 통해서 operation을 해야하기에 User thread보다 무겁다.
+
+### User thread
+
+![Untitled](img/os/user_thread.png)
+
+- Implement thread in user library.
+- 생성을 위해 system call이 필요 없다.
+- 하나의 kernel thread안에 여러 개의 user thread가 mapping되어서 만들어진다.
+- **장점** : kernel이 존재를 몰라서 user space안에서 thread library에 의해 관리된다. system call이 필요 없어서 빠르다.
+- **단점** : 하나의 user thread가 system call을 만들면 전체 thread가 blocked 상태가 된다 또한 Parallelism을 지원하지 않는다.
+
+<hr>
+</details>
+
+<details>
+<summary>TCB란 무엇일까요?</summary>
+
+<hr>
+
+- 프로세스를 PCB를 통해 관리하듯이 스레드는 TCB(Thread Control Block)라는 구조를 통해 관리된다.
+- TCB의 정보는 PCB안에 있다.
+- 각각의 Kernel Thread에만 생성된다.
+- PC, register의 정보를 갖고 있다.
+- ready queue는 CPU를 기다리고 있는 TCB의 리스트로 context switch를 할때마다 TCB들에 있는 각각의 PC, register 정보를 바꿔주게 된다.
+
+<hr>
+</details>
+
+<details>
+<summary>멀티 스레드의 장단점에 대해 설명해주세요.</summary>
+
+<hr>
+
+하나의 프로세스에 여러 스레드로 자원을 공유하며 작업을 나누어 수행하는 것이다.
+
+**장점**
+
+- 독립적으로 프로세스를 생성하는 것에 비해 PC, Register, Stack에 대한 공간만 만들면 됨으로 프로세스를 만드는 것보다 memory와 time 측면에서 이점이 있다.
+- 시스템의 처리율이 향상된다.
+- 스레드간 데이터를 주고받는 것이 간단해지고 시스템 자원 소모가 줄었다.
+- 스레드 사이의 작업량이 적어 Context Switching이 빠르다. (캐시 메모리를 비울 필요가 없다)
+  - Non-blocking system call을 하여 효율적이다.
+    - Single thread는 I/O작업을 하면 process전체가 waiting으로 가게 되는 blocking system인데 multi-thread process같은 경우는 하나의 thread가 I/O작업을 하여 해당 thread가 waiting으로 가더라도 다른 thread가 CPU를 할당받아 사용할 수 있는 Non-blocking system이다.
+- 간단한 통신 방법으로 프로그램의 응답시간과 통신 비용이 단축됐다. (IPC없이 Shared 메모리에 접근 가능)
+
+**단점**
+
+- 자원을 공유하기에 bottle neck, deadlock과 같은 동기화 문제가 발생할 수 있다.
+- 주의깊은 설계가 필요하고 디버깅이 어렵다.
+- 하나의 스레드에 문제가 생기면 전체 프로세스가 영향을 받는다.
+- 단일 프로세스 시스템의 경우 효과를 기대하기가 어렵다.
+
+<hr>
+</details>
+
+<details>
+<summary>멀티 스레드와 멀티 프로세스의 차이에 대해 설명해주세요</summary>
+
+<hr>
+
+> 멀티 프로세스는 하나의 프로그램을 여러 개의 프로세스로 구성하여, 각 프로세스가 하나의 작업을 처리하는 것을 의미한다.
+>
+
+> 멀티 스레드는 하나의 프로세스에 여러 스레드가 자원을 공유하며 작업을 나누어 수행하는 것이다.
+>
+
+차이
+
+- 멀티 스레드는 멀티 프로세스보다 작은 메모리 공간을 차지하고 Context Switching이 빠른 장점이 있지만, 동기화 문제와 하나의 스레드 장애로 전체 스레드가 종료될 위험을 갖고 있다.
+- 멀티 프로세스는 하나의 프로세스가 죽더라도 다른 프로세스에 영향을 주지 않아 안정성이 높지만, 멀티 스레드보다 많은 메모리 공간과 CPU 시간을 차지하는 단점이 있다.
+- 두 방법은 동시에 여러 작업을 수행하는 점에서 동일하지만, 각각의 장단이 있음으로 적용하는 시스템에 따라 적합한 동작 방식을 선택하고 적용해야 한다.
+
+### 📚 Reference
+- [[OS]멀티 프로세스와 멀티 스레드의 차이는 무엇일까?](https://livenow14.tistory.com/67)
+
+<hr>
+</details>
