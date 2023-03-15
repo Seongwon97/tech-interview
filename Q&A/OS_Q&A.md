@@ -549,6 +549,7 @@ CPU가 동작하는 가장 작은 단위를 스레드(thread)라고 한다.
 <hr>
 </details>
 
+## CPU 스케줄링
 <details>
 <summary>장기, 중기, 단기 스케줄러에 대해 설명해주세요.</summary>
 
