@@ -771,3 +771,200 @@ Aging은 Starvation을 해결하는 방법 중 하나로 각각의 process마다
 
 <hr>
 </details>
+
+## Synchronized
+<details>
+<summary>경쟁 상태(Race Condition)이란 무엇이며 언제 발생할까요?</summary>
+
+<hr>
+
+multicore cpu에서 두개 이상 프로세스가 parallel하게 실행되는 경우 또는 두개 이상의 프로세스가 하나의 single core에서 concurrently하게 실행되는 등 공유 자원에 동시접근하는 문제가 발생할 수 있다.
+
+이와 같이 두개 이상의 프로세스를 두고 경쟁하는 문제를 Race Condition이라고 한다.
+
+### Race Condition이 발생하는 경우
+
+1. **커널 작업을 수행하는 중에 인터럽트 발생하는 경우**
+  - 문제점 : 커널모드에서 데이터를 로드하여 작업을 수행하다가 인터럽트가 발생하여 같은 데이터를 조작하는 경우
+  - 해결법 : 커널모드에서 작업을 수행하는 동안, 인터럽트를 disable 시켜 CPU 제어권을 가져가지 못하도록 한다.
+2. **프로세스가 'System Call'을 하여 커널 모드로 진입하여 작업을 수행하는 도중 context switching이 발생할 때**
+  - 문제점 : 프로세스1이 커널모드에서 데이터를 조작하는 도중, 시간이 초과되어 CPU 제어권이 프로세스2로 넘어가 같은 데이터를 조작하는 경우 ( 프로세스2가 작업에 반영되지 않음 )
+  - 해결법 : 프로세스가 커널모드에서 작업을 하는 경우 시간이 초과되어도 CPU 제어권이 다른 프로세스에게 넘어가지 않도록 함
+3. **멀티 프로세서 환경에서 공유 메모리 내의 커널 데이터에 접근할 때**
+  - 문제점 : 멀티 프로세서 환경에서 2개의 CPU가 동시에 커널 내부의 공유 데이터에 접근하여 조작하는 경우
+  - 해결법 : 커널 내부에 있는 각 공유 데이터에 접근할 때마다, 그 데이터에 대한 lock/unlock을 하는 방법
+
+<hr>
+</details>
+
+<details>
+<summary>임계영역(Critical Section)에 대해 설명해주세요</summary>
+
+<hr>
+
+- 각각의 process들은 shared data를 접근하는 부분에 critical section이라고 불리는 code segment를 갖고 있다.
+- 동시간대에 하나의 process만 critical section을 실행할 수 있다.
+- 각각의 process들은 critical section에 들어갈 때 `entry section`에서 permission에 대해 물어보고 사용 가능하면 들어간다. 실행을 마치면 `exit section`을 통해 사용을 마쳤다는 것을 알리고 `remainder section`을 이어서 실행시킨다.
+- Critical section에는 필요 조건이 있다.
+  - **Mutual Exclusion**: 하나의 프로세스가 들어오면 다른 프로세스는 못 들어온다.
+  - **Progress**: Critical Section을 실행하는 프로세스가 없을 때는 원하는 프로세스는 누구나 들어갈 수 있다.
+  - **Bounded** **waiting**: 각각의 process들은 몇번의 시도안에 Critical Section에 들어갈 수 있어야 한다.
+- Critical Section은 Mutex Lock 또는 Semaphore로 구현된다.
+
+<hr>
+</details>
+
+<details>
+<summary>Mutex Lock과 Semaphore에 대해 설명해주세요. (+ 둘은 어떤 차이가 있나요?)</summary>
+
+<hr>
+
+많은 시스템들은 synchronization을 하기 위해 atomic hardware instruction의 도움을 받는다. Atomic instruction은 interrupt를 발생하지 않는다.
+
+mutex lock과 semaphore는 atomic instruction을 사용하기 위한 tool이다. 둘은 atomic instruction의 지원을 받아서 Critical Section을 구현한다.
+
+### Mutex Locks
+
+- 임계 구역을 가진 스레드들의 실행시간이 서로 겹치지 않고 각각 단독으로 실행되게 하는 기술로 공유된 자원의 데이터 혹은 임계영역(Critical Section) 등에 하나의 Process 혹은 Thread만 접근하도록 지원한다. (동기화 대상이 하나)
+- Mutual Exclusion(상호 배제)의 약자이다.
+- 해당 접근을 조율하기 위해 lock과 unlock을 사용한다. 누군가가 lock을 acquire하게된다면 다른 process들은 critical section을 들어가지 못한다.
+  - lock : 현재 임계 구역에 들어갈 권한을 얻어온다 ( 만약 다른 프로세스/스레드가 임계 구역 수행 중이면 종료할 때까지 대기 )
+  - unlock : 현재 임계 구역을 모두 사용했음을 알린다. ( 대기 중인 다른 프로세스/스레드가 임계 구역에 진입할 수 있음 )
+
+### Semaphore
+
+- 공유된 자원의 데이터 혹은 임계영역(Critical Section) 등에 정해진 수의 Process 혹은 Thread만 접근하도록 지원한다. (동기화 대상이 하나 이상)
+- Semaphore는 S라는 integer variable을 갖고 critical section을 관리한다.
+- Wait(S)와 signal(S)는 atomic instruction이다
+- Semaphore는 mutex lock보다 활용도가 높다.
+- semaphore의 크기에 따라 Binary semaphore, Counting semaphore가 존재
+- Deadlock과 Priority Inversion 문제가 발생할 수 있다.
+
+**Binary semaphore**
+
+- Semaphore값이 0,1만 갖는 것으로 Mutex lock과 동일하다.
+- 누가 사용하면 semaphore는 0으로 되고 안쓰면 1이 된다.
+
+**Counting semaphore**
+
+- Semaphore의 값이 0,1말고도 다른 값들도 가질 수 있어서 여러 개의 thread가 resource를 동시에 이용할 수 있게 해준다. (=여러 개의 resource를 이용할 수 있다.)
+
+### Semaphore와 Mutex의 차이
+
+- Mutex는 동기화 대상이 오직 1개일 때 사용하며, Semaphore는 동기화 대상이 1개 이상일 때 사용한다.
+- Mutex는 자원을 소유할 수 있고, 책임을 가지는 반면 Semaphore는 자원 소유가 불가합니다. Mutex는 상태가 0, 1 뿐이므로 Lock을 가질 수 있고, 소유하고 있는 스레드만이 Mutex를 해제할 수 있다. 반면 Semaphore는 Semaphore를 소유하지 않는 스레드가 Semaphore를 해제할 수 있다.
+- Semaphore는 시스템 범위에 걸쳐 있고, 파일 시스템 상의 파일로 존재합니다. 반면, Mutex는 프로세스의 범위를 가지며 프로세스 종료될 때 자동으로 Clean up 된다.
+
+### 📚 Reference
+- [[운영체제] Mutex 뮤텍스와 Semaphore 세마포어의 차이](https://heeonii.tistory.com/14)
+
+<hr>
+</details>
+
+<details>
+<summary>Priority Inversion은 무엇일까요?</summary>
+
+<hr>
+
+이는 Priority Scheduling에서 발생할 수 있는 문제로 우선순위가 높은 프로세스가 필요로 하는 자원을 우선순위가 낮은 프로세스가 lock을 걸고 있을 때 발생하는 문제이다.
+
+![Untitled](img/os/priority_inversion.png)
+
+낮은 우선순위를 가진 L이 resource R을 이용중인데 R을 이용하고 싶고 높은 우선순위를 가진 H가 ready queue에 추가되어서 먼저 수행을 하려고 하는데 L이 interrupt발생을 못시키게 하는 semaphore에 접근중이라 H는 L의 수행이 끝날때까지 기다린다. (여기까지는 Priority inversion이 아니다.)
+이때 R에 접근을 하고싶어하지 않는 M이 ready queue에 추가되면 R에 관련없는 M은 preemption을 발생시켜 L을 종료시키고 M을 수행한다. M이 preemption을 발생시켜 H가 M까지 기다리게 하는 일을 priority inversion이라고 한다.
+
+<hr>
+</details>
+
+<details>
+<summary>데드락(Deadlock)이란 무엇이며 언제 발생할까요?</summary>
+
+<hr>
+
+데드락은 두 개 이상의 프로세스나 스레드가 서로 자원을 얻지 못해서 다음 작업을 하지 못하여 무한히 다음 자원을 기다리는 상태를 말한다.
+
+> 자원의 종류
+>
+> - Physical resource type: I/O device, memory space, CPU cycle과 같은 resource들
+> - Logical resource type: semaphore, mutex lock, file과 같이 물리적으로 존재하지 않지만 여러 process가 같이 사용하는 자원
+
+### 데드락이 발생하는 조건
+
+데드락이 발생하려면 아래의 4가지 조건을 모두 만족해야한다.
+
+1. Mutual Exclusion
+
+   자원에 대해서 한개의 Process만이 점유할 수 있다. 동시에 여러개의 프로세스가 점유할 수 없다.
+
+2. Hold and wait
+
+   최소한 하나의 자원을 점유하고 있으면서 다른 프로세스에 할당되어 사용하고 있는 자원을 추가로 점유하기 위해 대기하는 프로세스가 존재해야 한다
+
+3. No Preemption
+
+   다른 프로세스에 할당된 자원은 사용이 끝날 때까지 강제로 뺐을 수 없다.
+
+4. Circular wait
+
+   사이클이 존재해야한다.
+
+<hr>
+</details>
+
+<details>
+<summary>데드락 예방, 회피, 무시에 대해 각각 설명해주세요.</summary>
+
+<hr>
+
+### 데드락 예방 (**Prevention**)
+
+데드락 발생 4가지 조건 중 하나의 조건을 없애서 Deadlock 예방할 수 있다. deadlock prevention은 deadlock의 4가지 발생조건 중 최소한 하나의 조건을 거부하여 예방하지만 실현 불가능한 case들이 존재하고 심각한 resource의 낭비를 만들어 utilization이 낮아진다.
+
+1. **No mutual exclusion**
+  - 같은 시간에 자원들을 공유할 수 있도록 한다.
+  - Problem: mutual exclusion을 없애면 deadlock을 예방하지만 race condition이 발생한다.
+
+    →  공유 할 수 없는 자원(mutex lock, printer)도 존재하기도 하여서 mutual exclusion을 없애는 것은 사실상 어렵다
+
+2. **No hold and wait**
+  - 프로세스가 resource를 요청할 때마다 다른 리소스를 보유하지 않도록 보장한다.
+  - **Total allocation**: 필요로 하는 자원들을 모두 이용할 수 있을 때까지 기다렸다가 한번에 allocation받아서 hold and wait을 없애는 방법이다.
+  - Problem: 작업이 끝난 resource들도 오랫동안 갖고 있어서 resource utilization이 떨어진다
+3. **Allow preemption**
+  - Preemption을 허용하는 방법이다. (e.g. RR scheduling)
+  - Problem: CPU같은 경우는 preemption을 하는 것이 괜찮지만 semaphore와 같은 자원들은 불가능하다.
+4. **No circular wait**
+  - **Total ordering**: 자원 타입별로 전체적인 순서를 정하고 order의 수를 높여가며 자원을 요청하여 circular wait을 없애준다. (사이클이 있어도 circular wait이 없어진다.)
+  - Problem: 항상 순서에 따라 자원을 요청해야한다.
+
+### 데드락 **회피(Avoidance)**
+
+- 어떠한 요청이 왔을 때 데드락이 절대 일어나지 않는 safe상태로 유지할 수 있으면 요청을 받아주고 unsafe상태로 가게 된다면 그 요청을 거부하며 항상 safe상태로 유지되게 하는 것이 Deadlock avoidance이다.
+- instance수가 1개인지 여러 개인지에 따라 **Resource-Allocation Graph Algorithm**과 **Banker’s Algorithm**이 존재한다.
+
+### 데드락 무시(**Ignorance)**
+
+- Ignore the problem and pretend that deadlocks never occur in the system (Ostrich Algorithm)
+- 실제 system에서는 deadlock prevention, avoidance를 하면 overhead가 너무 커서 실제로는 사용하지 않는다.
+- 실제로는 deadlock ignorance를 하여 개발자들이 deadlock에 빠지지 않도록 코딩을 하게 한다.
+- 만약 deadlock에 빠질 경우 deadlock recovery(ex. 재부팅, 프로세스 종료, resource강제로 빼았기)등의 작업을 한다.
+  - Deadlock Detection
+
+    자원 할당 그래프를 통해 데드락을 탐지한다.
+
+  - Recovery
+
+    데드락을 일으킨 프로세스를 종료하거나 할당된 자원을 해제시켜 회복하는 방법이다.
+
+    > **프로세스 종료 방법**
+    >
+    > - 교착 상태의 프로세스를 모두 중지한다
+    > - 교착 상태가 제거될 때까지 하나씩 프로세스 중지한다
+    >
+    > **자원 선점 방법**
+    >
+    > - 교착 상태의 프로세스가 점유하고 있는 자원을 선점해 다른 프로세스에게 할당한다 (해당 프로세스 일시정지 시킴)
+    > - 우선 순위가 낮은 프로세스나 수행 횟수 적은 프로세스 위주로 프로세스 자원 선점한다
+
+<hr>
+</details>
