@@ -405,7 +405,7 @@ Named 파이프는 전혀 모르는 상태의 프로세스들 사이의 통신�
 
 **Shared Memory**
 
-파이프, 메시지 큐가 통신을 이용한 설비라면, **공유 메모리는 데이터 자체를 공유하도록 지원하는 설비**이다.
+파이프, 메시지 큐가 통신을 이용한 설비라면, **공유 메모리는 데이터 자체를 공유하도록 지원하는 설비**이다.
 
 Shared memory를 사용하면 특수한 공간이 생기는데 이 공간을 process들이 각자 자신의 공간이라고 생각하며 사용한다. 프로세스가 공유 메모리 할당을 커널에 요청하면 커널은 해당 프로세스에 메모리 공간을 할당해주고 이후에 모든 프로세스는 해당 메모리에 접근할 수 있다.
 
@@ -545,6 +545,228 @@ CPU가 동작하는 가장 작은 단위를 스레드(thread)라고 한다.
 
 ### 📚 Reference
 - [[OS]멀티 프로세스와 멀티 스레드의 차이는 무엇일까?](https://livenow14.tistory.com/67)
+
+<hr>
+</details>
+
+<details>
+<summary>장기, 중기, 단기 스케줄러에 대해 설명해주세요.</summary>
+
+<hr>
+
+**장기 스케줄러(long term scheduler)**
+
+- 장기 스케줄러는 작업 스케줄러(job scheduler)라고도 불리며, 어떤 프로세스를 준비 큐에 진입시킬지 결정하는 역할을 한다.
+  - ready queue에 있는 작업들은 CPU에서 실행되기 위해 프로세스 메모리를 보유하여야 하여 장기 스케줄러는 메모리를 할당하는 문제에 관여한다. → 메모리 할당 승인을 결정
+  - 메모리에 올라가있는 프로세스의 수(degree of multiprogramming)를 조절한다.
+
+  > 현대의 시분할 시스템의 운영체제에서는 프로세스가 시작 상태가 되면 장기 스케줄러 없이 곧바로 프로세스에 메모리를 할당해 준비 큐에 넣어준다. → 장기 스케줄러 대신 중기 스케줄러를 사용
+>
+
+**단기 스케줄러(short term scheduler)**
+
+- 단기 스케줄러는 CPU 스케줄러라고도 하며, ready queue의 프로세스 중에서 어떤 프로세스를 다음번에 실행 상태로 만들 것인지 결정한다.
+- 시분할 시스템에서는 타이머 인터럽트가 발생하면 단기 스케줄러가 호출된다.
+
+**중기 스케줄러(medium term scheduler)**
+
+- 현대의 시분할 시스템용 운영체제에서는 장기 스케줄러 대신 중기 스케줄러를 두는 경우가 많다.
+- 너무 많은 프로세스에게 메모리를 할당해 시스템의 성능이 저하되는 경우 이를 해결하기 위해 메모리에 적재된 프로세스의 수를 동적으로 조절하기 위해 추가된 스케줄러이다. (장기 스케줄러와 같이 메모리에 올라와 있는 프로세스 수를 조절하는 역할 수행)
+- 프로세스당 보유 메모리양이 지나치게 적어진 경우 이를 완화시키기 위해 일부 프로세스를 메모리에서 디스크로 스왑 아웃(swap out)시키는 역할을 수행한다.
+  - 0순위: block 상태의 프로세스
+  - 그럼에도 부족하다면? 타이머 인터럽트의 발생으로 준비큐로 이동하는 프로세스를 swap out!
+- 중기 스케줄러에는 중지(suspended, stopped) 상태가 추가되어 운영된다.
+  - 중지 상태의 프로세스들은 메모리를 조금도 보유하지 않고 디스크에 스왑 아웃된 상태로 존재한다.
+
+<hr>
+</details>
+
+<details>
+<summary>선점과 비선점 스케줄링의 차이에 대해 설명해주세요</summary>
+
+<hr>
+
+**Non-preemtive(비선점)**
+
+- Process가 CPU를 스스로 놔줄 때까지 기다리는 스케줄링 방식이다. Process들은 종료 또는 I/O 작업을 하기 전까지는 CPU를 지속적으로 사용할 수 있다.
+- CPU를 놓아줄 때까지 기다려야해서 preemtive에 비하여 context switch가 적게 일어나 Overhead가 적다. 하지만 새로운 작업을 요청해도 자신의 순서가 오기까지 오래 기다려야 하기에 response time이 오래걸리는 단점이 있다.
+- 바로바로 반응해야하는 프로그램들에는 좋지 못하다.
+
+**Preemtive(선점)**
+
+- interrupt를 통해 강제로 CPU를 뺐는 방법이다.
+- 현대 대부분의 OS는 preemtive방식이다.
+- race condition이 발생한다.
+
+<hr>
+</details>
+
+<details>
+<summary>CPU Scheduling을 측정하는 척도에는 무엇이 있을까요?</summary>
+
+<hr>
+
+- **CPU utilization**: CPU를 얼마나 사용하는지, 높을수록 효율적으로 사용하는 거라 좋다.
+- **Throughput**:  시간당 수행한 작업의 양
+- **Turnaround time**
+  - 프로세스가 종료되기까지 걸린 시간
+  - waiting시간, 실행 시간을 모두 합친 것으로 process가 생성되어서 종료되기까지 총 시간
+- **Waiting time**
+  - ready queue에서 기다린 총 시간
+  - waiting queue에서 기다리는 전체 시간을 의미
+  - turnaround time과 함께 CPU scheduling 알고리즘의 성능을 측정하는 변수로 사용
+- **Response time**
+  - 프로세스가 생성되고 첫번째 응답이 있기까지 걸린 시간
+  - interactive and real-time system 프로그램 측정에 사용된다.
+
+<hr>
+</details>
+
+<details>
+<summary>CPU Scheduling의 종류에는 무엇이 있을까요?</summary>
+
+<hr>
+
+### **First-come, First-Served (FCFS)**
+
+- Queue와 같이 먼저 들어온 것이 먼저 수행되는 스케줄링 방법이다.
+- Non-preemtive scheduling방법이다.
+- **Convoy Effect** 가 발생할 수 있다.
+
+  > Convoy Effect란?
+  >
+  >
+  > I/O bound process 들이 늦게 들어오고 CPU bound process들이 먼저 들어오게 된다면 실행 시간이 적은 I/O bound process들은 많은 시간을 기다려야하는데 이러한 상황을 Convoy Effect라고 한다.
+  >
+  > ![Untitled](img/os/convoy_effect.png)
+>
+
+### Shortest-Job-First (SJF) scheduling
+
+- CPU burst가 짧은 것부터 실행을 하여 waiting time을 최소 시키는 스케줄링 방법이다.
+- 평균 waiting time이 가장 적다
+- SJF에서는 CPU bust length가 어떤지는 확실히 알 수가 없어서 예측을 해야한다. 예측은 과거의 데이터를 갖고 exponential moving average를 하여 CPU burst를 예측한다.
+- Nonpreemptive SJF, Preemptive SJF가 존재한다.
+
+![Untitled](img/os/cpu_scheduling_sjf.png)
+
+> **Shortest-Remaining-Time-First (SRTF)**
+>
+> - Preemptive SJF이다.
+> - preemptive SJF는 새로운 process가 들어왔을때 또는 process가 종료됐을때마다 어떤 process의 burst time이 가장 작은지 판별을 하고 현재 실행되고 있는 process보다 더 짧은 burst time을 가진 process가 있다면 context switch를 한다.
+    >
+    >     ![Untitled](img/os/cpu_scheduling_srtf.png)
+
+- SJF 장점
+  - waiting time을 최소화한다.
+  - 짧게 끝낼 수 있는 process들을 먼저 실행시켜서 process의 수를 최소화한다.
+- SJF 단점
+  - CPU burst time은 예측으로만 알 수 있는데 예측이 틀릴 수 있기에 실제 적용이 힘들다.
+  - **Starvation Problem**이 발생할 수 있다.
+
+    > Starvation이란?
+    >
+    > - burst time이 짧은 process들이 계속 들어오면 burst time의 길이가 긴 process는 실행되지 못하고 무한정 기다리게 된다. 이러한 문제를 Starvation이라고 한다.
+
+### HRN (Hightest Response-ratio Next)
+
+- SJF의 단점을 보완하여 우선순위를 계산하여 CPU 선점의 불평등을 보완한 방법이다.
+- 프로세스가 실제 실행될 시간과 대기 시간에 따라 우선순위를 결정한다.
+- 우선순위 = (대기시간 + 실행시간) / (실행시간)
+
+### **Round Robin (RR)**
+
+![Untitled](img/os/cpu_scheduling_rr.png)
+
+- Timer를 사용하여 time quantum이후에 실행중인 일을 중단하고 다른 process로 context switch 시키는 실행시키는 스케줄링 방법이다.
+- 일반적으로 SJF보다 평균 waiting time이 높다. 하지만 공정하고 starvation이 발생하지 않는다.
+- 성능은 time quantum을 매우 크게 설정하면 FCFS와 같이 실행되고 매우 작게 설정하면 context switch time이 증가하여 overhead가 매우 높아져 비효율적으로 된다.
+- 장점
+  - 모두 돌아가며 수행하기에 response time이 적다.
+  - FCFS와 비교하였을 때 I/O bound process에 한해서 waiting time이 크게 줄어든다. SJF보다는 일반적으로 waiting time이 길다.
+  - SJF의 문제인 starvation이 발생하지 않는다.
+- 단점
+  - 길이가 비슷한 process들을 수행시키면 turnaround time이 증가하는 문제점이 있다.
+  - preemtive 방식이기에 context switching을 하는 overhead가 발생한다.
+
+### **Priority Scheduling**
+
+![Untitled](img/os/cpu_scheduling_priority.png)
+
+- Priority가 높은 process들부터 먼저 수행하는 스케줄링 방법이다.
+- SJF도 priority scheduling중 하나이다. (우선순위를 job의 길이가 작은 거로 정한 것)
+- Starvation이 발생할 수 있다. → 그에 대한 해결책 중 하나가 **Aging**이다.
+
+  > Aging이란?
+  >
+  > - Aging은 각각의 process마다 시간이 지나면 지날수록 우선순의를 높여주는 방법이다.
+
+### Multileve Queue
+
+![Untitled](img/os/cpu_scheduling_multilevel_queue.png)
+
+- 작업들을 여러 종류의 그룹으로 나누어 여러 개의 큐를 이용하는 기법이다.
+  - 커널 작업은 우선순위가 높은 큐에서 실행된다.
+- 우선순위가 낮은 큐들이 실행 못하는 걸 방지하고자 각 큐마다 다른 `Time Quantum`을 설정 해주는 방식 사용한다.
+  - 우선순위가 높은 큐는 작은 `Time Quantum` 할당하고 우선순위가 낮은 큐는 큰 `Time Quantum` 할당한다.
+
+### Multilevel-Feedback-Queue (다단계 피드백 큐)
+
+![Untitled](img/os/cpu_scheduling_multilevel_feedback_queue.png)
+
+- Multileve Queue에서 time quantum을 다 채운 프로세스는 CPU burst process라고 판단하여 하위 우선순위 큐로 내리는 스케줄링 방법이다.
+- **I/O burst process와 같이 짧은 작업들에 우선순위를 주는 방법**이다.
+- 처리 시간이 짧은 프로세스를 먼저 처리하기에 평균 turnaround time을 줄여준다.
+
+### Real-time scheduling
+
+- Process중에서 Deadline이 존재하는 것들도 존재한다. Real-time scheduling은 deadline을 지켜주는 스케줄링 방법이다.
+- **Rate Montonic Scheduling, Earliest Deadline First Scheduling (EDF)** 이 존재한다.
+
+<hr>
+</details>
+
+<details>
+<summary>Starvation은 어떤 스케줄링에서 발생하는 문제일까요?</summary>
+
+<hr>
+
+Starvation이란?
+
+- Priority Scheduling에서 우선순위가 높은 process들이 계속 들어오면 우선순위가 낮은 process는 실행되지 못하고 무한정 기다리게 된다. 이러한 문제를 Starvation이라고 한다.
+- Priority Scheduling, SJF Scheduling에서 발생한다.
+
+<hr>
+</details>
+
+<details>
+<summary>Aging이란 무엇일까요?</summary>
+
+<hr>
+
+Aging은 Starvation을 해결하는 방법 중 하나로 각각의 process마다 시간이 지나면 지날수록 우선순의를 높여주는 방법이다.
+
+<hr>
+</details>
+
+<details>
+<summary>선점 스케줄링과 비선점 스케줄링에는 각각 어떤 것이 있을까요?</summary>
+
+<hr>
+
+**선점 스케줄링**
+
+- SRTF(Shortest Remaining Time First)
+- 라운드로빈(Round-Robin)
+- 다단계 큐(Multi-level Queue)
+- 다단계 피드백 큐
+
+**비선점 스케줄링**
+
+- FCFS(First Come First Service)
+- SJF(Shortest Job First)
+- 우선순위(Priority)
+- HRN(Heighest Response Next)
 
 <hr>
 </details>
