@@ -1322,3 +1322,54 @@ Cache hit을 극대화 시키기 위헤서는 지역성의 원리를 이용한�
 
 <hr>
 </details>
+
+<details>
+<summary>가상 메모리란 무엇일까요?</summary>
+
+<hr>
+
+- 현대 컴퓨터 환경에서 가장 널리 사용되는 메모리 관리 기법이다.
+- 물리적 메모리보다 더 큰 프로그램이 실행되는 것을 지원하기 위해 사용한다.
+- 물리적 메모리와는 독립적으로 0번지부터 시작하는 자신만의 가상메모리 주소를 갖고 운영체제는 가상메모리의 주소를 물리적 메모리주소로 매핑하는 기술을 이용해 주소를 변환시킨 후 프로그램을 물리적 메모리에 올린다. 덕분에 물리적 메모리 크기와 상관없이 사용할 수 있는 메모리가 충분히 크다고 가정하고 개발할 수 있다.
+- 프로그램이 돌아갈 때는 전체 프로그램을 메모리에 올리는 것이 아닌 현재 사용되고있는 필요한 부분만 메모리에 올리고 나머지는 하드디스크와 같은 보조 기억장치(swap area)에 저장해두었다가 필요할 때 적재한다. → **Demand Paging** or **Demand Segmentation**
+
+<hr>
+</details>
+
+<details>
+<summary>외부 단편화(External Fragmentation)와 내부 단편화(Internal Fragmentation)에 대해 설명해주세요</summary>
+
+<hr>
+
+**External fragmentation이란?**
+
+- Hole들이 조각나 있어서 빈 공간이 있음에도 불구하고 새로운 Process가 들어갈 수 있는 공간이 없게 되는 현상을 말한다.
+- Segmentation과 Contiguous Memory Allocation의 가변 분할 등에서 발생한다.
+
+**Internal fragmentation이란?**
+
+- Page와 같이 정해진 크기로 나누어진 공간에 데이터를 넣다보면 마지막 페이지의 경우 남은 공간이 발생할 수 있다. 이러한 공간을 Internal Fragmentation이라고 한다.
+- Page와 Contiguous Memory Allocation의 고정 분할 등에서 발생한다.
+
+<hr>
+</details>
+
+<details>
+<summary>Demand Paging에 대해 설명해주세요</summary>
+
+<hr>
+
+- 프로그램 실행 시 프로세스를 구성하는 모든 페이지를 한꺼번에 메모리에 올리는 것이 아닌 당장 사용될 페이지만 올리는 방식을 말한다.
+  - 메인 메모리에 올리지 않는 데이터들은 Swap space에 올라가게 된다.
+- 당장 실행에 필요한 페이지만을 메모리에 적재하여 메모리 사용량이 감소하고 프로레스 전체를 메모리에 올리는데 소요되는 입출력 오버헤드를 줄일 수 있다.
+  - 응답시간 단축
+  - 시스템이 더 많은 프로세스를 수용할 수 있다.
+  - 물리적 메모리 크기의 제약을 벗어난다.
+- Demand paging은 Error code, unusual routines, large data structure 등을 main memory에 올리는 것은 낭비라 필요한 일부만 올린다.
+- 특정 프로세스를 구성하는 페이지 중에서 어떤 프로세스가 메모리에 올라와있는지 파악하기 위해 demand paging에서는 페이지 테이블에 **유효-무효 비트(valid-invalid bit)**를 저장한다.
+- 필요한 페이지가 메모리에 올라와있지 않은 경우(invalid bit으로 되어있는 경우)를 **페이지 부재(page fault)**라고 한다.
+- 성능은 페이지 부재의 발생 빈도에 따라 결정된다.
+- 페이지를 적재시킬 때, 메모리에 빈 공간이 없으면 기존의 메모리에 올라와있는 페이지를 swap out 시켜야 한다. 해당 페이지를 결정하는 알고리즘은 **페이지 교체 알고리즘(page replacement algorithm)**이라고 한다.
+
+<hr>
+</details>
