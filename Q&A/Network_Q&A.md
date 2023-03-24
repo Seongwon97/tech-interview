@@ -1319,3 +1319,15 @@ Http는 무상태성, 비연결성이라 연결의 정보를 저장하고 있지
 
 <hr>
 </details>
+
+<details>
+<summary>NAT(Network Address Translation)이란?</summary>
+
+<hr>
+
+- 인터넷에 접속하지 않거나 NAT(Network Address Translation)을 사용할 경우(공유기나 회사 방화벽을 사용하는 경우) 사설 IP를 사용할 수 있다.
+- 사설 IP를 사용하면 인터넷에 직접 접속하지 못하지만 IP를 변환해주는 NAT 장비에서 공인 IP로 변경한 후에 인터넷 접속이 가능하다.
+    - 가정의 공유기가 대표적인 NAT이다.
+
+<hr>
+</details>
