@@ -501,6 +501,132 @@ DefaultTransactionDefinition에 설정된 격리수준은 ISOLATION_DEFAULT로 D
 
 </details>
 
+<details>
+<summary>스프링의 프록시에 대해 설명해주세요</summary>
+
+<br>
+
+### 프록시의 사용 목적
+
+1. 클라이언트가 타깃에 접근하는 방법을 제어하기 위해
+2. 타깃에 부가적인 기능을 부여하기 위해
+
+### 프록시 패턴이란?
+
+- 특정 객체에 대한 접근을 제어하거나 부가기능을 구현하는데 사용하는 패턴이다.
+  - 초기화 지연, 접근 권한 제어, 부가기능 등에 사용될 수 있다.
+
+### 프록시 패턴의 장점
+
+- OCP: 기존 코드를 변경하지 않고 새로운 기능을 추가 할 수 있다.
+- SRP: 기존 코드가 해야 하는 일만 유지할 수 있다.
+- 기능 추가, 접근 제어 등 다양하게 응용하여 활용할 수 있다.
+
+### 단점
+
+- 코드의 복잡도가 증가한다.
+- 중복 코드가 발생한다.
+
+→ 이러한 문제를 해결하기 위해 JDK Dynamic Proxy가 나왔다.
+
+### JDK Dynamic Proxy란?
+
+- 프록시 팩토리에 의해 런타임시 다이나믹하게 만들어지는 오브젝트이다.
+- 프록시 클래스를 직접 구현하지 않아도 된다는 장점이 있다.
+  - 코드 복잡도 해소
+- 부가기능을 작성하는 Invocation Handler를 통해 중복 코드를 제거하였다.
+- 프록시 팩토리에게 인터페이스 정보만 제공해주면 해당 인터페이스를 구현한 클래스 오브젝트를 자동으로 생성해준다.
+  - 인터페이스가 반드시 존재해야 한다.
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/28c35925-8456-4a0a-804e-84f506eb0096/Untitled.png)
+
+### JDK Dynamic Proxy 특징
+
+- JDK에서 지원하는 프록시 생성 방법이다.
+  - 외부에 의존하지 않는다.
+- Reflection API를 사용하여 느리다
+- 인터페이스가 반드시 있어야 한다.
+- Invocation Handler를 재정의한 invoke를 구현해줘야 부가기능이 추가된다.
+
+→ 인터페이스가 무조건 존재하여야하는 문제가 있어 CGLIB Proxy가 나왔다.
+
+### CGLIB Proxy
+
+> 스프링에서는 클라이언트가 메서드를 요청하면 Proxy Factory Bean이라는 곳에서 인터페이스 유무를 확인하여 인터페이스가 있으면 JDK Dynamic Proxy를 사용하고 인터페이스가 없으면 CGLIB으로 생성한다. → SpringBooy에서는 인터페이스와 구현체를 분리해도 기본 설정이 proxy-target-class=true가 되어 CGLIB이 동작한다.
+>
+>
+> ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0256c5c6-0b98-4796-af48-cbdcd5f80585/Untitled.png)
+>
+- CGLIB는 상속을 통한 프록시를 구현한다
+- 바이트 코드를 조작해서 프록시를 생성한다.
+- MethodInterceptor를 재정의한 Intercept를 구현해야 부가기능이 추가된다.
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ded152a0-6099-404b-8b07-e191a5ac83ae/Untitled.png)
+
+### 특징
+
+- 인터페이스에도 강제로 적용할 수 있다. 이때는 클래스에도 프록시를 적용시켜야 한다.
+- 메서드에 final을 붙이면 오버라이딩이 불가능하다
+- ~~net.sf.cglib.proxy.Enhancer 의존성을 추가해줘야 했다.~~
+
+  → Spring 3.2부터 Spring Core패키지에 포함되었다.
+
+- ~~Default 생성자가 필요했다~~
+
+  → Spring 4.0에 포함된 Objenesis 라이브러리를 활용해 해결되었다.
+
+- ~~Target의 생성자가 두 번 호출되었다.~~
+
+  → Spring 4.0에 포함된 Objenesis 라이브러리를 활용해 해결되었다.
+
+
+### 성능
+
+1. 메서드가 처음 호출되었을 때 동적으로 타깃 클래스의 바이트 코드를 조작한다.
+2. 이후 호출시에는 조작된 바이트 코드를 재사용한다.
+
+→ 덕분에 JDK Dynamic Proxy와 비교하였을 때, 성능이 좋다.
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3fb23ca3-5f08-45e3-9027-cec401e0da94/Untitled.png)
+
+### Spring Boot는 왜 기본적으로 CGLIB을 사용할까?
+
+> SpringBooy에서는 인터페이스와 구현체를 분리해도 기본 설정이 proxy-target-class=true가 되어 CGLIB이 동작한다.
+>
+- 인터페이스 기반 프록시는 ClassCast Exceptions를 추적하기 어렵게 한다.
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/207bdc6d-b5f7-41a7-9cde-4f44a531b90c/Untitled.png)
+
+### 스프링의 Proxy구현
+
+스프링에서 Proxy를 구현하려면 ProxyFactoryBean을 통해 생성하고 구현할 수 있다.
+
+> 스프링은 프록시를 Bean으로 만들어주는 ProxyFactoryBean을 제공한다.
+>
+
+### ProxyFactoryBean의 특징
+
+- Spring에서 지원하는 프록시 생성 방법이다.
+- 타깃의 인터페이스가 반드시 필요하지 않다.
+- 프록시 빈들 생성해준다.
+- 부가기능을 MethodInterceptor로 재정의한 invoke로 구현해줘야 추가된다.
+  - JDK Dynamic Proxy의 InvocationHander를 사용하지 않는 이유는 InvocationHander는 타깃 객체에 의존적이라 타깃이 바뀔 때마다 새로운 Bean으로 등록하고 객체로 생성해줘야 하는 문제점이 있기 떄문이다.
+  - 그래서 ProxyFactoryBean은 타겟의 정보에 의존하지 않는 MethodInterceptor를 사용하며 타깃의 정보는 Proxy가 갖고 동작한다.
+
+    → 부가기능을 Singleton으로 생성 가능하다
+
+
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5ca0805a-886c-4d2e-ab09-814537680e48/Untitled.png)
+
+
+### ProxyFactoryBean의 한계
+
+- ProxyFactoryBean을 매번 생성해줘야 한다
+
+  → AOP를 통해 해결(Advice, Pointcut, 자동 프록시 생성기)
+
+</details>
+
 # JPA
 <details>
 <summary>ORM이란 무엇일까요?</summary>
