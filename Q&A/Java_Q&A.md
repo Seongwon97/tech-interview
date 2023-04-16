@@ -622,3 +622,14 @@ public class Lottos {
   - 오버라이딩, 오버로딩
 
 </details>
+
+<details>
+<summary>자바에서 Wapper class(Reference type)와 Primitive type을 나눈 이유는 무엇일까요?</summary>
+
+<br>
+
+자바는 객체지향 언어라 `List<>`와 같이 제너릭에 기본형이 아닌 객체 타입이 필요할 때가 존재한다.
+
+이러한 상황을 해결하기 위해 자바는 기본형인 Primitive type외에 이를 Boxing한 Wapper Class를 만들어 사용중이다.
+
+</details>
