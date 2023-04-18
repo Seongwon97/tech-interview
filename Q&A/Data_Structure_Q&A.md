@@ -59,3 +59,37 @@ private void swap(int[] arr, int i, int j) {
 ```
 
 </details>
+
+<details>
+<summary>삽입정렬(Insertion Sort)에 대해 설명해주세요.</summary>
+
+<br>
+
+- 데이터를 하나씩 확인하며 각 데이터를 적절한 위치에 삽입하는 알고리즘이다.
+- 데이터가 거의 정렬되어 있을 때 훨씬 효율적이다.
+- 선택 정렬에 비해 실행 측면에서 더 효율적인 알고리즘이다.
+- 삽입 정렬은 특정한 데이터가 적절한 위치에 들어가기 이전에 그 앞까지는 이미 정렬되었다고 가정한다.
+- 시간복잡도는 $O(N^2)$ 이다.
+    - 하지만 배열이 먼저 정렬되어 있다면 $O(N)$의 시간 복잡도를 갖게 된다.
+
+```java
+public void insertionSort(int[] arr) {
+    for (int i = 1; i < arr.length; i++) {
+        for (int j = i; j > 0; j--) {
+            if (arr[j] < arr[j - 1]) {
+                swap(arr, j, j - 1);
+            } else {
+                break;
+            }
+        }
+    }
+}
+
+private void swap(int[] arr, int i, int j) {
+    int temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+}
+```
+
+</details>
