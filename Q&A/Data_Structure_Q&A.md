@@ -31,3 +31,31 @@ private void swap(int[] arr, int i, int j) {
 
 </details>
 
+<details>
+<summary>버블정렬(Bubble Sort)에 대해 설명해주세요</summary>
+
+<br>
+
+- 이중 For문에서 n번째와 n+1번째의 숫자를 비교하고 큰 수를 뒤로 보내도록 자리를 바꾸며 매 반복마다 마지막 가장 큰 수를 찾아 정렬해가는 방법이다.
+- 이중 for문을 돌아 $O(n^2)$의 시간복잡도를 갖는다.
+
+```java
+public void bubbleSort(int[] arr) {
+    int size = arr.length;
+    for (int i = 1; i < size; i++) {
+        for (int j = 0; j < size - i; j++) {
+            if (arr[j] > arr[j + 1]) {
+                swap(arr, j, j + 1);
+            }
+        }
+    }
+}
+
+private void swap(int[] arr, int i, int j) {
+    int temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+}
+```
+
+</details>
