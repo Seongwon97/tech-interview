@@ -93,3 +93,57 @@ private void swap(int[] arr, int i, int j) {
 ```
 
 </details>
+
+<details>
+<summary>퀵정렬(Quick Sort)에 대해 설명해주세요.</summary>
+
+<br>
+
+- 가장 많이 사용되는 정렬 알고리즘이다. 병합 정렬 알고리즘도 퀵 정렬과 같이 빠르다.
+- 기준 데이터(`pivot`)를 설정하고 그 기준보다 큰 데이터와 작은 데이터의 위치를 바꾸는 알고리즘이다.
+    - 퀵 정렬을 수행하기 전에는 피벗을 어떻게 설정할 것인지 미리 명시해야 한다.
+    - 대표적인 분할방식으로는 호어 분할(`Hoare Partition`) 방식이 있다.
+
+      > 호어 분할 방식: 리스트에서 첫 번째 데이터를 피벗으로 정한다.
+>
+
+```java
+public void quickSort(int[] arr, int start, int end) {
+    if (start >= end) {
+        return;
+    }
+    int pivot = start; // 호어 방식으로 첫번째 값을 pivot으로 설정
+    int left = start + 1;
+    int right = end;
+    while (left <= right) {
+        // pivot보다 큰 데이터를 찾을 때까지 반복
+        while (left <= end && arr[left] <= arr[pivot]) {
+            left++;
+        }
+        // pivot보다 작은 데이터를 찾을 떄까지 반복
+        while (right > start && arr[right] >= arr[pivot]) {
+            right--;
+        }
+
+        if (left > right) { // 엇갈렸다면 작은 데이터와 피벗을 교체
+            swap(arr, right, pivot);
+        } else { // 엇갈리지 않았다면 작은 데이터와 큰 데이터를 교체
+            swap(arr, left, right);
+        }
+    }
+    // 분할 이후 왼쪽 부분과 오른쪽 부분에서 각각 정렬 수행
+    quickSort(arr, start, right - 1);
+    quickSort(arr, right + 1, end);
+}
+
+private void swap(int[] arr, int i, int j) {
+    int temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+}
+```
+
+- 퀵 정렬의 평균 시간 복잡도는 $O(NlogN)$이다
+    - 최악의 시간복잡도는 $O(N^2)$ 이다. 피벗을 정하는 방식을 가장 왼쪽의 값을 갖는 호어 분할 방식으로 진행할 경우, 이미 데이터가 정렬되어 있는 경우 느리게 작동한다.
+
+</details>
